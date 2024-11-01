@@ -70,6 +70,7 @@
         </plugins>
     </build>
 
+    <!-- Disable native build currently
     <profiles>
         <profile>
             <id>native-image</id>
@@ -94,4 +95,5 @@
             </properties>
         </profile>
     </profiles>
+    -->
 </project>
