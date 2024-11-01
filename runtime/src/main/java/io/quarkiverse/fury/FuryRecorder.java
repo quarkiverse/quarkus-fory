@@ -16,6 +16,10 @@ public class FuryRecorder {
         if (config.requiredClassRegistration()) {
             builder.requireClassRegistration(true);
         }
+        if (config.threadSafe()) {
+            builder.buildThreadSafeFury();
+        }
+
         Fury fury = builder.build();
 
         // register to the container

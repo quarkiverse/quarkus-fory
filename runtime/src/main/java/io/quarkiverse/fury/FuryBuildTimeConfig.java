@@ -9,8 +9,14 @@ import io.smallrye.config.WithDefault;
 @ConfigMapping(prefix = "quarkus.fury")
 public interface FuryBuildTimeConfig {
     /**
-     * Where to require class registration for serialization. The default is true.
+     * Require class registration for serialization. The default is true.
      */
     @WithDefault("true")
     boolean requiredClassRegistration();
+
+    /**
+     * Whether to use thread safe fury. The default is true.
+     */
+    @WithDefault("true")
+    boolean threadSafe();
 }
