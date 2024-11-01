@@ -1,4 +1,4 @@
-package io.quarkus.fury.runtime;
+package io.quarkiverse.fury.runtime;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

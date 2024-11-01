@@ -1,5 +1,7 @@
 package io.quarkus.fury.it;
 
+import io.quarkiverse.fury.it.Foo;
+import io.quarkiverse.fury.it.Struct;
 import org.apache.fury.Fury;
 import org.apache.fury.ThreadSafeFury;
 import org.junit.jupiter.api.Test;

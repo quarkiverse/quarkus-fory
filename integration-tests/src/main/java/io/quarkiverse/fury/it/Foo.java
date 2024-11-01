@@ -17,9 +17,9 @@
  * under the License.
  */
 
-package io.quarkus.fury.it;
+package io.quarkiverse.fury.it;
 
-import io.quarkus.fury.runtime.FurySerialization;
+import io.quarkiverse.fury.runtime.FurySerialization;
 
 import java.util.List;
 import java.util.Map;

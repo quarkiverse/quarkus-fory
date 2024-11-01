@@ -1,7 +1,7 @@
-package io.quarkus.fury.deployment;
+package io.quarkiverse.fury.deployment;
 
 import io.quarkus.builder.item.SimpleBuildItem;
-import io.quarkus.fury.runtime.FurySerialization;
+import io.quarkiverse.fury.runtime.FurySerialization;
 import org.apache.fury.Fury;
 import org.apache.fury.serializer.Serializer;
 import org.apache.fury.util.Preconditions;
