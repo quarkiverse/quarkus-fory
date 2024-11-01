@@ -1,30 +1,25 @@
 package io.quarkiverse.fury.deployment;
 
-import io.quarkus.builder.item.SimpleBuildItem;
-import io.quarkiverse.fury.runtime.FurySerialization;
-import org.apache.fury.Fury;
-import org.apache.fury.serializer.Serializer;
-import org.apache.fury.util.Preconditions;
 import org.jboss.jandex.ClassInfo;
 import org.jboss.jandex.JandexReflection;
 
-public class FurySerializerBuildItem extends SimpleBuildItem {
-  private static final Fury fury = Fury.builder().build();
+import io.quarkiverse.fury.FurySerialization;
+import io.quarkus.builder.item.MultiBuildItem;
 
-  private final Class<? extends Serializer> serializerClass;
+final public class FurySerializerBuildItem extends MultiBuildItem {
+    private final Class<?> clazz;
+    private final int classId;
 
-  public FurySerializerBuildItem(ClassInfo classInfo) {
-    Class<?> clazz = JandexReflection.loadClass(classInfo);
-    FurySerialization annotation = clazz.getDeclaredAnnotation(FurySerialization.class);
-    int classId = annotation.classId();
-    if (classId > 0 && classId < Short.MAX_VALUE) {
-      Preconditions.checkArgument(classId >= 256, "Class id %s must be >= 256", classId);
-      Class<?> registeredClass = fury.getClassResolver().getRegisteredClass((short) classId);
-      Preconditions.checkArgument(registeredClass == null,
-        "ClassId %s has been registered for class %s", classId, registeredClass);
-    } else {
-      fury.register(clazz, (short) classId, true);
+    public FurySerializerBuildItem(ClassInfo classInfo) {
+        clazz = JandexReflection.loadClass(classInfo);
+        classId = clazz.getDeclaredAnnotation(FurySerialization.class).classId();
     }
-    serializerClass = fury.getClassResolver().getSerializerClass(clazz);
-  }
+
+    public int getClassId() {
+        return classId;
+    }
+
+    public Class<?> getClazz() {
+        return clazz;
+    }
 }
