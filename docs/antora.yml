@@ -1,0 +1,5 @@
+name: quarkus-fury
+title: Fury
+version: dev
+nav:
+  - modules/ROOT/nav.adoc

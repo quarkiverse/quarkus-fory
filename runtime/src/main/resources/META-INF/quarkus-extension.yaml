@@ -1,0 +1,13 @@
+name: Fury
+metadata:
+  keywords:
+    - fury
+    - serialization
+    - rpc
+    - performance
+    - encoding
+    - codec
+  guide: https://docs.quarkiverse.io/quarkus-fury/dev/index.html
+  categories:
+    - "data"
+  status: "preview"
