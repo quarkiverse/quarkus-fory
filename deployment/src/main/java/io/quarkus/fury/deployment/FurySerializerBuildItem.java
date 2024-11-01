@@ -18,6 +18,7 @@ public class FurySerializerBuildItem extends SimpleBuildItem {
     FurySerialization annotation = clazz.getDeclaredAnnotation(FurySerialization.class);
     int classId = annotation.classId();
     if (classId > 0 && classId < Short.MAX_VALUE) {
+      Preconditions.checkArgument(classId >= 256, "Class id %s must be >= 256", classId);
       Class<?> registeredClass = fury.getClassResolver().getRegisteredClass((short) classId);
       Preconditions.checkArgument(registeredClass == null,
         "ClassId %s has been registered for class %s", classId, registeredClass);
