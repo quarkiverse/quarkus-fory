@@ -53,21 +53,6 @@ public class FuryResources {
 
     @GET
     @Path("/pojo")
-    public Boolean testSerializeBarRecord() {
-        Bar bar = new Bar(10, "abc");
-        Bar bar2 = (Bar) fury.deserialize(fury.serialize(bar));
-        Serializer serializer;
-        if (fury instanceof ThreadSafeFury) {
-            serializer = ((ThreadSafeFury) fury).execute(f -> f.getClassResolver().getSerializer(Bar.class));
-        } else {
-            serializer = ((Fury) fury).getClassResolver().getSerializer(Bar.class);
-        }
-        Preconditions.checkArgument(serializer instanceof BarSerializer, serializer);
-        return bar2.equals(bar);
-    }
-
-    @GET
-    @Path("/pojo")
     public Boolean testSerializePOJO() {
         Struct struct1 = Struct.create();
         Struct struct2 = (Struct) fury.deserialize(fury.serialize(struct1));
