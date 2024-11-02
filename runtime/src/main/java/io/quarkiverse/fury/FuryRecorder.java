@@ -5,6 +5,7 @@ import org.apache.fury.Fury;
 import org.apache.fury.ThreadSafeFury;
 import org.apache.fury.config.FuryBuilder;
 import org.apache.fury.resolver.ClassResolver;
+import org.apache.fury.serializer.Serializer;
 import org.apache.fury.util.Preconditions;
 
 import io.quarkus.arc.runtime.BeanContainer;
@@ -26,7 +27,8 @@ public class FuryRecorder {
     }
 
     public void registerClass(
-            final RuntimeValue<BaseFury> fury, final Class<?> clazz, final int classId) {
+            final RuntimeValue<BaseFury> fury, final Class<?> clazz,
+            final int classId, Class<? extends Serializer> serializer) {
         BaseFury furyValue = fury.getValue();
         if (classId > 0) {
             Preconditions.checkArgument(
@@ -54,6 +56,9 @@ public class FuryRecorder {
         } else {
             // Generate serializer bytecode.
             furyValue.register(clazz, true);
+        }
+        if (serializer != null) {
+            furyValue.registerSerializer(clazz, serializer);
         }
     }
 }

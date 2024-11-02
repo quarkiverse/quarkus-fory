@@ -9,6 +9,10 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 
 import org.apache.fury.BaseFury;
+import org.apache.fury.Fury;
+import org.apache.fury.ThreadSafeFury;
+import org.apache.fury.serializer.Serializer;
+import org.apache.fury.util.Preconditions;
 
 @Path("/fury")
 @ApplicationScoped
@@ -23,6 +27,21 @@ public class FuryResources {
         Foo foo2 = (Foo) fury.deserialize(fury.serialize(foo1));
 
         return foo1.equals(foo2);
+    }
+
+    @GET
+    @Path("/bar")
+    public Boolean testSerializeBarRecord() {
+        Bar bar = new Bar(10, "abc");
+        Bar bar2 = (Bar) fury.deserialize(fury.serialize(bar));
+        Serializer serializer;
+        if (fury instanceof ThreadSafeFury) {
+            serializer = ((ThreadSafeFury) fury).execute(f -> f.getClassResolver().getSerializer(Bar.class));
+        } else {
+            serializer = ((Fury) fury).getClassResolver().getSerializer(Bar.class);
+        }
+        Preconditions.checkArgument(serializer instanceof BarSerializer, serializer);
+        return bar2.equals(bar);
     }
 
     @GET
