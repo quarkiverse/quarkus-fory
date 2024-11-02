@@ -3,5 +3,5 @@ package io.quarkiverse.fury.it;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 @QuarkusIntegrationTest
-public class FuryResourceIT extends FuryResourceTest {
+public class FuryIT extends FuryTest {
 }

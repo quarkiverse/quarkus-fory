@@ -26,6 +26,7 @@
 
     <properties>
         <quarkus.version>3.16.1</quarkus.version>
+        <fury.version>0.8.0</fury.version>
     </properties>
 
     <dependencyManagement>
@@ -36,6 +37,11 @@
                 <version>${quarkus.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.fury</groupId>
+                <artifactId>fury-core</artifactId>
+                <version>${fury.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
