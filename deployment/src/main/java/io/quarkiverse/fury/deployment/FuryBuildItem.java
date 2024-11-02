@@ -7,13 +7,13 @@ import io.quarkus.runtime.RuntimeValue;
 
 /** A build item that represents a Fury instance. */
 public final class FuryBuildItem extends SimpleBuildItem {
-  private final RuntimeValue<BaseFury> value;
+    private final RuntimeValue<BaseFury> value;
 
-  public FuryBuildItem(RuntimeValue<BaseFury> value) {
-    this.value = value;
-  }
+    public FuryBuildItem(RuntimeValue<BaseFury> value) {
+        this.value = value;
+    }
 
-  public RuntimeValue<BaseFury> getFury() {
-    return value;
-  }
+    public RuntimeValue<BaseFury> getFury() {
+        return value;
+    }
 }

@@ -21,46 +21,45 @@ import io.quarkus.deployment.builditem.FeatureBuildItem;
 
 class FuryProcessor {
 
-  private static final String FEATURE = "fury";
-  private static final DotName FURY_SERIALIZATION =
-      DotName.createSimple(FurySerialization.class.getName());
+    private static final String FEATURE = "fury";
+    private static final DotName FURY_SERIALIZATION = DotName.createSimple(FurySerialization.class.getName());
 
-  @BuildStep
-  FeatureBuildItem feature() {
-    return new FeatureBuildItem(FEATURE);
-  }
-
-  @BuildStep
-  public void findSerializableClasses(
-      CombinedIndexBuildItem combinedIndex, BuildProducer<FurySerializerBuildItem> pojoProducer) {
-    combinedIndex.getIndex().getAnnotations(FURY_SERIALIZATION).stream()
-        .filter(annotation -> annotation.target().kind() == AnnotationTarget.Kind.CLASS)
-        .forEach(
-            i -> {
-              pojoProducer.produce(new FurySerializerBuildItem(i.target().asClass()));
-            });
-  }
-
-  @BuildStep
-  void unremovableBeans(
-      BuildProducer<AdditionalBeanBuildItem> beanProducer,
-      BuildProducer<UnremovableBeanBuildItem> unremovableBeans) {
-    beanProducer.produce(AdditionalBeanBuildItem.unremovableOf(FuryProducer.class));
-  }
-
-  @BuildStep
-  @Record(ExecutionTime.STATIC_INIT)
-  public void registerClasses(
-      FuryBuildItem fury, List<FurySerializerBuildItem> classes, FuryRecorder recorder) {
-    for (FurySerializerBuildItem item : classes) {
-      recorder.registerClass(fury.getFury(), item.getClazz(), item.getClassId());
+    @BuildStep
+    FeatureBuildItem feature() {
+        return new FeatureBuildItem(FEATURE);
     }
-  }
 
-  @BuildStep
-  @Record(ExecutionTime.STATIC_INIT)
-  public FuryBuildItem setup(
-      FuryBuildTimeConfig config, BeanContainerBuildItem beanContainer, FuryRecorder recorder) {
-    return new FuryBuildItem(recorder.createFury(config, beanContainer.getValue()));
-  }
+    @BuildStep
+    public void findSerializableClasses(
+            CombinedIndexBuildItem combinedIndex, BuildProducer<FurySerializerBuildItem> pojoProducer) {
+        combinedIndex.getIndex().getAnnotations(FURY_SERIALIZATION).stream()
+                .filter(annotation -> annotation.target().kind() == AnnotationTarget.Kind.CLASS)
+                .forEach(
+                        i -> {
+                            pojoProducer.produce(new FurySerializerBuildItem(i.target().asClass()));
+                        });
+    }
+
+    @BuildStep
+    void unremovableBeans(
+            BuildProducer<AdditionalBeanBuildItem> beanProducer,
+            BuildProducer<UnremovableBeanBuildItem> unremovableBeans) {
+        beanProducer.produce(AdditionalBeanBuildItem.unremovableOf(FuryProducer.class));
+    }
+
+    @BuildStep
+    @Record(ExecutionTime.STATIC_INIT)
+    public void registerClasses(
+            FuryBuildItem fury, List<FurySerializerBuildItem> classes, FuryRecorder recorder) {
+        for (FurySerializerBuildItem item : classes) {
+            recorder.registerClass(fury.getFury(), item.getClazz(), item.getClassId());
+        }
+    }
+
+    @BuildStep
+    @Record(ExecutionTime.STATIC_INIT)
+    public FuryBuildItem setup(
+            FuryBuildTimeConfig config, BeanContainerBuildItem beanContainer, FuryRecorder recorder) {
+        return new FuryBuildItem(recorder.createFury(config, beanContainer.getValue()));
+    }
 }
