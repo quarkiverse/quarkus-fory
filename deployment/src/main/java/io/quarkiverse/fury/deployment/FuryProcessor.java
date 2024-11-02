@@ -34,10 +34,7 @@ class FuryProcessor {
             CombinedIndexBuildItem combinedIndex, BuildProducer<FurySerializerBuildItem> pojoProducer) {
         combinedIndex.getIndex().getAnnotations(FURY_SERIALIZATION).stream()
                 .filter(annotation -> annotation.target().kind() == AnnotationTarget.Kind.CLASS)
-                .forEach(
-                        i -> {
-                            pojoProducer.produce(new FurySerializerBuildItem(i.target().asClass()));
-                        });
+                .forEach(i -> pojoProducer.produce(new FurySerializerBuildItem(i.target().asClass())));
     }
 
     @BuildStep
@@ -52,7 +49,7 @@ class FuryProcessor {
     public void registerClasses(
             FuryBuildItem fury, List<FurySerializerBuildItem> classes, FuryRecorder recorder) {
         for (FurySerializerBuildItem item : classes) {
-            recorder.registerClass(fury.getFury(), item.getClazz(), item.getClassId());
+            recorder.registerClass(fury.getFury(), item.getClazz(), item.getClassId(), item.getSerializer());
         }
     }
 
