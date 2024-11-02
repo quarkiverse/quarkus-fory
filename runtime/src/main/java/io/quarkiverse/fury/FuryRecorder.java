@@ -57,6 +57,8 @@ public class FuryRecorder {
             // Generate serializer bytecode.
             furyValue.register(clazz, true);
         }
-        furyValue.registerSerializer(clazz, serializer);
+        if (serializer != null) {
+            furyValue.registerSerializer(clazz, serializer);
+        }
     }
 }

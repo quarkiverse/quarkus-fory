@@ -16,7 +16,11 @@ public final class FurySerializerBuildItem extends MultiBuildItem {
         clazz = JandexReflection.loadClass(classInfo);
         FurySerialization annotation = clazz.getDeclaredAnnotation(FurySerialization.class);
         classId = annotation.classId();
-        serializer = annotation.serializer();
+        if (annotation.serializer() == Serializer.class) {
+            serializer = null;
+        } else {
+            serializer = annotation.serializer();
+        }
     }
 
     public int getClassId() {
