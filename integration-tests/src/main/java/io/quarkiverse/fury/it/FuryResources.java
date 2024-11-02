@@ -30,7 +30,7 @@ public class FuryResources {
     }
 
     @GET
-    @Path("/pojo")
+    @Path("/bar")
     public Boolean testSerializeBarRecord() {
         Bar bar = new Bar(10, "abc");
         Bar bar2 = (Bar) fury.deserialize(fury.serialize(bar));
