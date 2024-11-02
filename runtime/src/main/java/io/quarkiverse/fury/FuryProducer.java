@@ -2,25 +2,20 @@ package io.quarkiverse.fury;
 
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Singleton;
-
 import org.apache.fury.BaseFury;
-import org.apache.fury.Fury;
 
-/**
- * Producers of beans that are injectable via CDI.
- */
+/** Producers of beans that are injectable via CDI. */
 @Singleton
 public class FuryProducer {
-    private volatile BaseFury fury;
+  private volatile BaseFury fury;
 
-    public void setFury(BaseFury fury) {
-        this.fury = fury;
-    }
+  public void setFury(BaseFury fury) {
+    this.fury = fury;
+  }
 
-    @Singleton
-    @Produces
-    BaseFury fury() {
-        return this.fury;
-    }
-
+  @Singleton
+  @Produces
+  BaseFury fury() {
+    return this.fury;
+  }
 }

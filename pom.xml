@@ -59,6 +59,22 @@
                     <artifactId>quarkus-config-doc-maven-plugin</artifactId>
                     <version>${quarkus.version}</version>
                 </plugin>
+                <plugin>
+                    <groupId>com.diffplug.spotless</groupId>
+                    <artifactId>spotless-maven-plugin</artifactId>
+                    <version>2.5.0</version>
+                    <configuration>
+                        <java>
+                            <googleJavaFormat>
+                                <version>1.7</version>
+                                <style>GOOGLE</style>
+                            </googleJavaFormat>
+                            <excludes>
+                                <exclude>**/Foo.java</exclude>
+                            </excludes>
+                        </java>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
