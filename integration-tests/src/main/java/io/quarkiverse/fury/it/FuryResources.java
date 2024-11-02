@@ -8,13 +8,14 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 
+import org.apache.fury.BaseFury;
 import org.apache.fury.Fury;
 
 @Path("/fury")
 @ApplicationScoped
 public class FuryResources {
     @Inject
-    Fury fury;
+    BaseFury fury;
 
     @GET
     @Path("/record")

@@ -3,6 +3,7 @@ package io.quarkiverse.fury;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Singleton;
 
+import org.apache.fury.BaseFury;
 import org.apache.fury.Fury;
 
 /**
@@ -10,15 +11,15 @@ import org.apache.fury.Fury;
  */
 @Singleton
 public class FuryProducer {
-    private volatile Fury fury;
+    private volatile BaseFury fury;
 
-    public void setFury(Fury fury) {
+    public void setFury(BaseFury fury) {
         this.fury = fury;
     }
 
     @Singleton
     @Produces
-    Fury fury() {
+    BaseFury fury() {
         return this.fury;
     }
 
