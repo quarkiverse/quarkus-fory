@@ -1,11 +1,13 @@
 package io.quarkiverse.fury.it;
 
+import java.util.List;
+import java.util.Map;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
-import java.util.List;
-import java.util.Map;
+
 import org.apache.fury.BaseFury;
 
 @Path("/fury")

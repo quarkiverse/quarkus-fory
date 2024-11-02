@@ -1,5 +1,10 @@
 package io.quarkiverse.fury.deployment;
 
+import java.util.List;
+
+import org.jboss.jandex.AnnotationTarget;
+import org.jboss.jandex.DotName;
+
 import io.quarkiverse.fury.FuryBuildTimeConfig;
 import io.quarkiverse.fury.FuryProducer;
 import io.quarkiverse.fury.FuryRecorder;
@@ -13,9 +18,6 @@ import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
-import java.util.List;
-import org.jboss.jandex.AnnotationTarget;
-import org.jboss.jandex.DotName;
 
 class FuryProcessor {
 

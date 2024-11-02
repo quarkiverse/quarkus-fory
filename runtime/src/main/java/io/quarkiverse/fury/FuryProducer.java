@@ -2,6 +2,7 @@ package io.quarkiverse.fury;
 
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Singleton;
+
 import org.apache.fury.BaseFury;
 
 /** Producers of beans that are injectable via CDI. */

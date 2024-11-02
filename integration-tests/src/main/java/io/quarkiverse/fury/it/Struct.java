@@ -19,9 +19,10 @@
 
 package io.quarkiverse.fury.it;
 
-import io.quarkiverse.fury.FurySerialization;
 import java.io.Serializable;
 import java.util.Objects;
+
+import io.quarkiverse.fury.FurySerialization;
 
 @FurySerialization
 public class Struct implements Serializable {

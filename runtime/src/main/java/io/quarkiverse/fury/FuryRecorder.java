@@ -1,14 +1,15 @@
 package io.quarkiverse.fury;
 
-import io.quarkus.arc.runtime.BeanContainer;
-import io.quarkus.runtime.RuntimeValue;
-import io.quarkus.runtime.annotations.Recorder;
 import org.apache.fury.BaseFury;
 import org.apache.fury.Fury;
 import org.apache.fury.ThreadSafeFury;
 import org.apache.fury.config.FuryBuilder;
 import org.apache.fury.resolver.ClassResolver;
 import org.apache.fury.util.Preconditions;
+
+import io.quarkus.arc.runtime.BeanContainer;
+import io.quarkus.runtime.RuntimeValue;
+import io.quarkus.runtime.annotations.Recorder;
 
 @Recorder
 public class FuryRecorder {

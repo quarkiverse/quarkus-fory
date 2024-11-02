@@ -1,8 +1,9 @@
 package io.quarkiverse.fury.deployment;
 
+import org.apache.fury.BaseFury;
+
 import io.quarkus.builder.item.SimpleBuildItem;
 import io.quarkus.runtime.RuntimeValue;
-import org.apache.fury.BaseFury;
 
 /** A build item that represents a Fury instance. */
 public final class FuryBuildItem extends SimpleBuildItem {
