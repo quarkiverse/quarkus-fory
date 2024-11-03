@@ -1,0 +1,27 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "chaokunyang",
+      "name": "Shawn Yang",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12445254?v=4",
+      "profile": "https://github.com/chaokunyang",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "quarkus-fury",
+  "projectOwner": "quarkiverse"
+}
