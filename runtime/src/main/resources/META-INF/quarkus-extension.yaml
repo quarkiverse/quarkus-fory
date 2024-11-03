@@ -7,6 +7,8 @@ metadata:
     - performance
     - encoding
     - codec
+  icon-url: https://raw.githubusercontent.com/apache/fury/main/docs/images/logo/fury-logo.svg
+  sponsor: "Apache Software Foundation"
   guide: https://docs.quarkiverse.io/quarkus-fury/dev/index.html
   categories:
     - "data"
