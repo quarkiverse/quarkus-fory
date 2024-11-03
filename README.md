@@ -1,6 +1,6 @@
 # Quarkus Fury
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Version](https://img.shields.io/maven-central/v/io.quarkiverse.fury/quarkus-fury?logo=apache-maven&style=flat-square)](https://central.sonatype.com/artifact/io.quarkiverse.fury/quarkus-fury-parent)
@@ -22,6 +22,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/chaokunyang"><img src="https://avatars.githubusercontent.com/u/12445254?v=4?s=100" width="100px;" alt="Shawn Yang"/><br /><sub><b>Shawn Yang</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-fury/commits?author=chaokunyang" title="Code">💻</a> <a href="#maintenance-chaokunyang" title="Maintenance">🚧</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://zhfeng.github.io/"><img src="https://avatars.githubusercontent.com/u/1246139?v=4?s=100" width="100px;" alt="Zheng Feng"/><br /><sub><b>Zheng Feng</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-fury/commits?author=zhfeng" title="Code">💻</a> <a href="#maintenance-zhfeng" title="Maintenance">🚧</a></td>
     </tr>
   </tbody>
 </table>
