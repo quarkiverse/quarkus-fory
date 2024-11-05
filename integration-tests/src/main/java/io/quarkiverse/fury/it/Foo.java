@@ -22,8 +22,5 @@ package io.quarkiverse.fury.it;
 import java.util.List;
 import java.util.Map;
 
-import io.quarkiverse.fury.FurySerialization;
-
-@FurySerialization(classId = 300)
 public record Foo(int f1, String f2, List<String> f3, Map<String, Long> f4) {
 }

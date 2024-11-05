@@ -22,9 +22,6 @@ package io.quarkiverse.fury.it;
 import java.io.Serializable;
 import java.util.Objects;
 
-import io.quarkiverse.fury.FurySerialization;
-
-@FurySerialization
 public class Struct implements Serializable {
     public int f1;
     public long f2;

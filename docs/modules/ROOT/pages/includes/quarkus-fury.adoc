@@ -41,5 +41,61 @@ endif::add-copy-button-to-env-var[]
 |boolean
 |`true`
 
+h|[[quarkus-fury_section_quarkus-fury-register-classes]] [.section-name.section-level0]##link:#quarkus-fury_section_quarkus-fury-register-classes[Configurations]##
+h|Type
+h|Default
+
+a|icon:lock[title=Fixed at build time] [[quarkus-fury_quarkus-fury-register-classes-configuration-name-class-id]] [.property-path]##link:#quarkus-fury_quarkus-fury-register-classes-configuration-name-class-id[`quarkus.fury.register-classes."configuration-name".class-id`]##
+
+[.description]
+--
+Class id must be greater or equal to 256, and it must be different between classes. The default is -1.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_FURY_REGISTER_CLASSES__CONFIGURATION_NAME__CLASS_ID+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_FURY_REGISTER_CLASSES__CONFIGURATION_NAME__CLASS_ID+++`
+endif::add-copy-button-to-env-var[]
+--
+|int
+|`-1`
+
+a|icon:lock[title=Fixed at build time] [[quarkus-fury_quarkus-fury-register-classes-configuration-name-serializer]] [.property-path]##link:#quarkus-fury_quarkus-fury-register-classes-configuration-name-serializer[`quarkus.fury.register-classes."configuration-name".serializer`]##
+
+[.description]
+--
+Specify a customized serializer for current class. This should be empty to let Fury create serializer for current class. But if users want to customize serialization for this class, one can provide serializer here.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_FURY_REGISTER_CLASSES__CONFIGURATION_NAME__SERIALIZER+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_FURY_REGISTER_CLASSES__CONFIGURATION_NAME__SERIALIZER+++`
+endif::add-copy-button-to-env-var[]
+--
+|string
+|
+
+
+a|icon:lock[title=Fixed at build time] [[quarkus-fury_quarkus-fury-register-class-names]] [.property-path]##link:#quarkus-fury_quarkus-fury-register-class-names[`quarkus.fury.register-class-names`]##
+
+[.description]
+--
+Names of classes to register.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_FURY_REGISTER_CLASS_NAMES+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_FURY_REGISTER_CLASS_NAMES+++`
+endif::add-copy-button-to-env-var[]
+--
+|string
+|
+
 |===
 

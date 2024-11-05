@@ -1,5 +1,10 @@
 package io.quarkiverse.fury;
 
+import java.util.Map;
+import java.util.Optional;
+
+import io.quarkus.runtime.annotations.ConfigDocMapKey;
+import io.quarkus.runtime.annotations.ConfigDocSection;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
 import io.smallrye.config.ConfigMapping;
@@ -15,4 +20,16 @@ public interface FuryBuildTimeConfig {
     /** Whether to use thread safe fury. The default is true. */
     @WithDefault("true")
     boolean threadSafe();
+
+    /**
+     * Configurations
+     */
+    @ConfigDocSection
+    @ConfigDocMapKey("configuration-name")
+    Map<String, FuryRegisterClassConfig> registerClasses();
+
+    /**
+     * Names of classes to register.
+     */
+    Optional<String> registerClassNames();
 }

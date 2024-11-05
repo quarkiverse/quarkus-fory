@@ -1,6 +1,7 @@
 package io.quarkiverse.fury.deployment;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.jboss.jandex.AnnotationTarget;
 import org.jboss.jandex.DotName;
@@ -46,10 +47,21 @@ class FuryProcessor {
 
     @BuildStep
     @Record(ExecutionTime.STATIC_INIT)
-    public void registerClasses(
+    public void registerClasses(FuryBuildTimeConfig configs,
             FuryBuildItem fury, List<FurySerializerBuildItem> classes, FuryRecorder recorder) {
         for (FurySerializerBuildItem item : classes) {
             recorder.registerClass(fury.getFury(), item.getClazz(), item.getClassId(), item.getSerializer());
+        }
+
+        if (configs.registerClassNames().isPresent()) {
+            for (String name : configs.registerClassNames().get().split(",")) {
+                recorder.registerClassByName(fury.getFury(), name, -1, Optional.empty());
+            }
+        }
+
+        for (var config : configs.registerClasses().entrySet()) {
+            recorder.registerClassByName(fury.getFury(), config.getKey(), config.getValue().classId(),
+                    config.getValue().serializer());
         }
     }
 
