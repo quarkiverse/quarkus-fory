@@ -27,11 +27,6 @@ public @interface FurySerialization {
      * Specify which classes the provided serialized is used for.
      * If not specified, the current annotated class is used.
      */
-    Class<?> targetClass() default CurrentAnnotatedTypeStub.class;
+    Class<?>[] targetClasses() default {};
 
-    /**
-     * A placeholder class used to denote current annotated type.
-     */
-    final class CurrentAnnotatedTypeStub {
-    }
 }
