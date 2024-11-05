@@ -27,9 +27,9 @@ public class FuryRecorder {
     }
 
     public void registerClass(
-            final RuntimeValue<BaseFury> fury, final Class<?> clazz,
+            final RuntimeValue<BaseFury> furyValue, final Class<?> clazz,
             final int classId, Class<? extends Serializer> serializer) {
-        BaseFury furyValue = fury.getValue();
+        BaseFury fury = furyValue.getValue();
         if (classId > 0) {
             Preconditions.checkArgument(
                     classId >= 256 && classId <= Short.MAX_VALUE,
@@ -38,12 +38,12 @@ public class FuryRecorder {
                     Short.MAX_VALUE);
             Class<?> registeredClass;
             if (fury instanceof ThreadSafeFury) {
-                ThreadSafeFury threadSafeFury = (ThreadSafeFury) furyValue;
+                ThreadSafeFury threadSafeFury = (ThreadSafeFury) fury;
                 registeredClass = (threadSafeFury).execute(f -> f.getClassResolver().getRegisteredClass((short) classId));
                 // Generate serializer bytecode.
                 threadSafeFury.execute(f -> f.getClassResolver().getSerializerClass(clazz));
             } else {
-                ClassResolver classResolver = ((Fury) furyValue).getClassResolver();
+                ClassResolver classResolver = ((Fury) fury).getClassResolver();
                 registeredClass = classResolver.getRegisteredClass((short) classId);
                 // Generate serializer bytecode.
                 classResolver.getSerializerClass(clazz);
@@ -53,12 +53,13 @@ public class FuryRecorder {
                     "ClassId %s has been registered for class %s",
                     classId,
                     registeredClass);
+            fury.register(clazz, (short) classId);
         } else {
             // Generate serializer bytecode.
-            furyValue.register(clazz, true);
+            fury.register(clazz, true);
         }
         if (serializer != null) {
-            furyValue.registerSerializer(clazz, serializer);
+            fury.registerSerializer(clazz, serializer);
         }
     }
 }
