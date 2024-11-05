@@ -23,14 +23,15 @@ public interface FuryBuildTimeConfig {
 
     /**
      * Names of classes to register which no need to be with class-id or customize serializer.
+     * It has to be separated by comma.
      */
     Optional<String> registerClassNames();
 
     /**
-     * Configurations of register classes
+     * Configurations of register class
      */
     @ConfigDocSection
     @ConfigDocMapKey("register-class-name")
-    Map<String, FuryRegisterClassConfig> registerClasses();
+    Map<String, FuryRegisterClassConfig> registerClass();
 
 }

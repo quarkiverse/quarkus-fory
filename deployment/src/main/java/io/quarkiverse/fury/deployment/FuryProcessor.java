@@ -59,7 +59,7 @@ class FuryProcessor {
             }
         }
 
-        for (var config : configs.registerClasses().entrySet()) {
+        for (var config : configs.registerClass().entrySet()) {
             recorder.registerClassByName(fury.getFury(), config.getKey(), config.getValue().classId(),
                     config.getValue().serializer());
         }
