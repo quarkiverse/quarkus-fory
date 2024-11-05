@@ -25,6 +25,13 @@ public class FuryResources {
     public Boolean testSerializeFooRecord() {
         Foo foo1 = new Foo(10, "abc", List.of("str1", "str2"), Map.of("k1", 10L, "k2", 20L));
         Foo foo2 = (Foo) fury.deserialize(fury.serialize(foo1));
+        Serializer serializer;
+        if (fury instanceof ThreadSafeFury) {
+            serializer = ((ThreadSafeFury) fury).execute(f -> f.getClassResolver().getSerializer(Foo.class));
+        } else {
+            serializer = ((Fury) fury).getClassResolver().getSerializer(Foo.class);
+        }
+        Preconditions.checkArgument(serializer instanceof FooSerializer, serializer);
 
         return foo1.equals(foo2);
     }
