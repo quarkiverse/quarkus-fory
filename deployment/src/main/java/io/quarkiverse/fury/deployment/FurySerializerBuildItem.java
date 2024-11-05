@@ -40,12 +40,12 @@ public final class FurySerializerBuildItem extends MultiBuildItem {
         Class<?> clazz = JandexReflection.loadClass(classInfo);
         FurySerialization annotation = clazz.getDeclaredAnnotation(FurySerialization.class);
         Class<?>[] classes = annotation.targetClasses();
-        int classed = annotation.classId();
+        int classId = annotation.classId();
         Class<? extends Serializer> serializer = annotation.serializer();
         if (classes.length > 1) {
-            Preconditions.checkArgument(classed == -1,
+            Preconditions.checkArgument(classId == -1,
                     "Class %s is must not be specified when multiple `targetClasses` %s are specified",
-                    classed, classes);
+                    classId, classes);
             return Arrays.stream(classes)
                     .map(clz -> new FurySerializerBuildItem(clz, -1, serializer))
                     .collect(Collectors.toList());
@@ -53,7 +53,7 @@ public final class FurySerializerBuildItem extends MultiBuildItem {
             if (classes.length == 1) {
                 clazz = classes[0];
             }
-            return Collections.singletonList(new FurySerializerBuildItem(clazz, classed, serializer));
+            return Collections.singletonList(new FurySerializerBuildItem(clazz, classId, serializer));
         }
     }
 }
