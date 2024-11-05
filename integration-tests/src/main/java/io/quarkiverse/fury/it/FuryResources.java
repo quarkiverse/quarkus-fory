@@ -52,6 +52,21 @@ public class FuryResources {
     }
 
     @GET
+    @Path("/third_party_bar")
+    public Boolean testSerializeThirdPartyBar() {
+        ThirdPartyBar bar = new ThirdPartyBar(10, "abc");
+        ThirdPartyBar bar2 = (ThirdPartyBar) fury.deserialize(fury.serialize(bar));
+        Serializer<?> serializer;
+        if (fury instanceof ThreadSafeFury) {
+            serializer = ((ThreadSafeFury) fury).execute(f -> f.getClassResolver().getSerializer(Bar.class));
+        } else {
+            serializer = ((Fury) fury).getClassResolver().getSerializer(Bar.class);
+        }
+        Preconditions.checkArgument(serializer instanceof ThridPartyBarSerializer, serializer);
+        return bar2.equals(bar);
+    }
+
+    @GET
     @Path("/pojo")
     public Boolean testSerializePOJO() {
         Struct struct1 = Struct.create();

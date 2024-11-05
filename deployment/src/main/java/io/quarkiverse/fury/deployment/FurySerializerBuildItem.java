@@ -12,15 +12,10 @@ public final class FurySerializerBuildItem extends MultiBuildItem {
     private final int classId;
     private final Class<? extends Serializer> serializer;
 
-    public FurySerializerBuildItem(ClassInfo classInfo) {
-        clazz = JandexReflection.loadClass(classInfo);
-        FurySerialization annotation = clazz.getDeclaredAnnotation(FurySerialization.class);
-        classId = annotation.classId();
-        if (annotation.serializer() == Serializer.class) {
-            serializer = null;
-        } else {
-            serializer = annotation.serializer();
-        }
+    private FurySerializerBuildItem(Class<?> clazz, int classId, Class<? extends Serializer> serializer) {
+        this.clazz = clazz;
+        this.classId = classId;
+        this.serializer = serializer;
     }
 
     public int getClassId() {
@@ -33,5 +28,14 @@ public final class FurySerializerBuildItem extends MultiBuildItem {
 
     public Class<? extends Serializer> getSerializer() {
         return serializer;
+    }
+
+    public static FurySerializerBuildItem buildItem(ClassInfo classInfo) {
+        Class<?> clazz = JandexReflection.loadClass(classInfo);
+        FurySerialization annotation = clazz.getDeclaredAnnotation(FurySerialization.class);
+        if (annotation.targetClass() != FurySerialization.CurrentAnnotatedTypeStub.class) {
+            clazz = annotation.targetClass();
+        }
+        return new FurySerializerBuildItem(clazz, annotation.classId(), annotation.serializer());
     }
 }
