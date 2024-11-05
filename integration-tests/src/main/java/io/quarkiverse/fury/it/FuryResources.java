@@ -58,9 +58,9 @@ public class FuryResources {
         ThirdPartyBar bar2 = (ThirdPartyBar) fury.deserialize(fury.serialize(bar));
         Serializer<?> serializer;
         if (fury instanceof ThreadSafeFury) {
-            serializer = ((ThreadSafeFury) fury).execute(f -> f.getClassResolver().getSerializer(Bar.class));
+            serializer = ((ThreadSafeFury) fury).execute(f -> f.getClassResolver().getSerializer(ThirdPartyBar.class));
         } else {
-            serializer = ((Fury) fury).getClassResolver().getSerializer(Bar.class);
+            serializer = ((Fury) fury).getClassResolver().getSerializer(ThirdPartyBar.class);
         }
         Preconditions.checkArgument(serializer instanceof ThridPartyBarSerializer, serializer);
         return bar2.equals(bar);
