@@ -19,4 +19,9 @@ public class FuryTest {
     public void testPojo() {
         given().when().get("/fury/pojo").then().statusCode(200).body(is("true"));
     }
+
+    @Test
+    public void testThirdPartyBar() {
+        given().when().get("/fury/third_party_bar").then().statusCode(200).body(is("true"));
+    }
 }

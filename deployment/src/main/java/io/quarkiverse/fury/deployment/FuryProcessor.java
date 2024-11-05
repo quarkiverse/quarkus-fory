@@ -35,7 +35,7 @@ class FuryProcessor {
             CombinedIndexBuildItem combinedIndex, BuildProducer<FurySerializerBuildItem> pojoProducer) {
         combinedIndex.getIndex().getAnnotations(FURY_SERIALIZATION).stream()
                 .filter(annotation -> annotation.target().kind() == AnnotationTarget.Kind.CLASS)
-                .forEach(i -> pojoProducer.produce(new FurySerializerBuildItem(i.target().asClass())));
+                .forEach(i -> FurySerializerBuildItem.buildItems(i.target().asClass()).forEach(pojoProducer::produce));
     }
 
     @BuildStep

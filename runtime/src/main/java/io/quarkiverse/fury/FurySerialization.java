@@ -22,4 +22,11 @@ public @interface FurySerialization {
      * users want to customize serialization for this class, one can provide serializer here.
      */
     Class<? extends Serializer> serializer() default Serializer.class;
+
+    /**
+     * Specify which classes the provided serialized is used for.
+     * If not specified, the current annotated class is used.
+     */
+    Class<?>[] targetClasses() default {};
+
 }
