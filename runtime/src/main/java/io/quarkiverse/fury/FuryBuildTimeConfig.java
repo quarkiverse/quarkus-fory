@@ -22,14 +22,15 @@ public interface FuryBuildTimeConfig {
     boolean threadSafe();
 
     /**
-     * Configurations
-     */
-    @ConfigDocSection
-    @ConfigDocMapKey("configuration-name")
-    Map<String, FuryRegisterClassConfig> registerClasses();
-
-    /**
-     * Names of classes to register.
+     * Names of classes to register which no need to be with class-id or customize serializer.
      */
     Optional<String> registerClassNames();
+
+    /**
+     * Configurations of register classes
+     */
+    @ConfigDocSection
+    @ConfigDocMapKey("register-class-name")
+    Map<String, FuryRegisterClassConfig> registerClasses();
+
 }
