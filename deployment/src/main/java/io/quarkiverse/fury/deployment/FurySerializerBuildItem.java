@@ -36,6 +36,10 @@ public final class FurySerializerBuildItem extends MultiBuildItem {
         if (annotation.targetClass() != FurySerialization.CurrentAnnotatedTypeStub.class) {
             clazz = annotation.targetClass();
         }
-        return new FurySerializerBuildItem(clazz, annotation.classId(), annotation.serializer());
+        Class<? extends Serializer> serializer = annotation.serializer();
+        if (serializer == Serializer.class) {
+            serializer = null;
+        }
+        return new FurySerializerBuildItem(clazz, annotation.classId(), serializer);
     }
 }
