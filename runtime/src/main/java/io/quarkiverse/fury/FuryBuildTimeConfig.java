@@ -46,11 +46,11 @@ public interface FuryBuildTimeConfig {
      * Whether deserialize/skip data of un-existed class. If not enabled, an exception will be thrown
      * if class not exist.
      */
-    @WithDefault("true")
+    @WithDefault("false")
     boolean deserializeNonexistentClass();
 
     /** If an enum value doesn't exist, return a null instead of throws exception. */
-    @WithDefault("true")
+    @WithDefault("false")
     boolean deserializeNonexistentEnumValueAsNull();
 
     /** Whether to use thread safe fury. The default is true. */
