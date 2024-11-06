@@ -23,7 +23,13 @@ public class FuryRecorder {
             final FuryBuildTimeConfig config, final BeanContainer beanContainer) {
         // create the Fury instance from the config
         FuryBuilder builder = Fury.builder();
-        builder.requireClassRegistration(config.requiredClassRegistration());
+        builder.requireClassRegistration(config.requiredClassRegistration())
+                .withRefTracking(config.trackRef())
+                .withCompatibleMode(config.compatibleMode())
+                .withDeserializeNonexistentClass(config.deserializeNonexistentClass())
+                .deserializeNonexistentEnumValueAsNull(config.deserializeNonexistentEnumValueAsNull())
+                .withNumberCompressed(config.compressNumber())
+                .withStringCompressed(config.compressString());
         BaseFury fury = config.threadSafe() ? builder.buildThreadSafeFury() : builder.build();
 
         // register to the container
