@@ -25,7 +25,7 @@
     </scm>
 
     <properties>
-        <quarkus.version>3.16.1</quarkus.version>
+        <quarkus.version>3.16.2</quarkus.version>
         <fury.version>0.8.0</fury.version>
     </properties>
 
