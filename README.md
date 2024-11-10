@@ -7,9 +7,45 @@
 
 Quarkus Fury is a Quarkus extension to use [Apache Fury](https://github.com/apache/fury) for serialization.
 
-# Documentation
+## Documentation
 
 The documentation for this extension can be found [here](https://docs.quarkiverse.io/quarkus-fury/dev/index.html) while the documentation for the Apache Fury can be found at https://fury.apache.org/.
+
+## Getting Started
+
+```java
+import java.util.List;
+import java.util.Map;
+
+import io.quarkiverse.fury.FurySerialization;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+
+import org.apache.fury.BaseFury;
+
+@Path("/fury")
+@ApplicationScoped
+public class FuryResources {
+  @FurySerialization
+  public record Foo(int f1, String f2, List<String> f3, Map<String, Long> f4) {
+  }
+
+  @Inject
+  BaseFury fury;
+
+  @GET
+  @Path("/record")
+  public Boolean testSerializeFooRecord() {
+    Foo foo1 = new Foo(10, "abc", List.of("str1", "str2"), Map.of("k1", 10L, "k2", 20L));
+    Foo foo2 = (Foo) fury.deserialize(fury.serialize(foo1));
+    return foo1.equals(foo2);
+  }
+}
+```
+
+More details about usage can be found [here](https://docs.quarkiverse.io/quarkus-fury/dev/index.html).
 
 ## Contributors ✨
 
