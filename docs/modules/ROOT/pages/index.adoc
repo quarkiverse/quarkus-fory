@@ -2,7 +2,7 @@
 
 include::./includes/attributes.adoc[]
 
-Quarkus-Fury: quarkus extension provides integration for Apache Fury serialization framework. https://github.com/apache/fury[Apache Fury] is a blazingly fast multi-language serialization framework powered by JIT and zero-copy. With quarkus-fury extension, users can use fast and easy-to-use serialization feature provided by Apache Fury out-of-box.
+Integrates with the Apache Fury serialization framework. https://github.com/apache/fury[Apache Fury] is a blazingly fast multi-language serialization framework powered by JIT and zero-copy. With the `quarkus-fury` extension, users can use fast and easy-to-use serialization feature provided by Apache Fury out-of-box.
 
 
 == Installation
