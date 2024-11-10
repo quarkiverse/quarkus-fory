@@ -26,7 +26,7 @@
 
     <properties>
         <quarkus.version>3.16.2</quarkus.version>
-        <fury.version>0.8.0</fury.version>
+        <fury.version>0.9.0</fury.version>
     </properties>
 
     <dependencyManagement>
