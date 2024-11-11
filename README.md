@@ -25,13 +25,13 @@ import jakarta.ws.rs.Path;
 
 import org.apache.fury.BaseFury;
 
+@FurySerialization
+record Foo(int f1, String f2, List<String> f3, Map<String, Long> f4) {
+}
+
 @Path("/fury")
 @ApplicationScoped
 public class FuryResources {
-  @FurySerialization
-  public record Foo(int f1, String f2, List<String> f3, Map<String, Long> f4) {
-  }
-
   @Inject
   BaseFury fury;
 

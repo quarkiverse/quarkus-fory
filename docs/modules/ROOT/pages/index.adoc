@@ -2,7 +2,8 @@
 
 include::./includes/attributes.adoc[]
 
-TIP: Describe what the extension does here.
+Integrates with the Apache Fury serialization framework. https://github.com/apache/fury[Apache Fury] is a blazingly fast multi-language serialization framework powered by JIT and zero-copy. With the `quarkus-fury` extension, users can use fast and easy-to-use serialization feature provided by Apache Fury out-of-box.
+
 
 == Installation
 
@@ -83,7 +84,7 @@ If the class is a third-party class which you can't add annotation, you can spec
 import io.quarkiverse.fury.FurySerialization;
 
 @FurySerialization(classId = 200, serializer = FooSerializer.class, targetClasses = Foo.class)
-record FooConfig(int f1, String f2, List<String> f3, Map<String, Long> f4) {
+public class FooConfig {
 }
 ----
 
