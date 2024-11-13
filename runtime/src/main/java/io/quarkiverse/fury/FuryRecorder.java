@@ -24,6 +24,7 @@ public class FuryRecorder {
         // create the Fury instance from the config
         FuryBuilder builder = Fury.builder();
         builder.requireClassRegistration(config.requiredClassRegistration())
+                .withName("Fury-" + System.nanoTime())
                 .withRefTracking(config.trackRef())
                 .withCompatibleMode(config.compatibleMode())
                 .withDeserializeNonexistentClass(config.deserializeNonexistentClass())
