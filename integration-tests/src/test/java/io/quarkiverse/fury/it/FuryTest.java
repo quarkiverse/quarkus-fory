@@ -33,7 +33,7 @@ public class FuryTest {
     @Test
     public void testFuryBar() {
         Bar bar = new Bar(1, "hello bar");
-        Fury fury = new FuryBuilder().withLanguage(Language.JAVA).requireClassRegistration(true).build();
+        Fury fury = Fury.builder().requireClassRegistration(true).withName("Fury" + System.nanoTime()).build();
         fury.register(Bar.class);
         fury.registerSerializer(Bar.class, BarSerializer.class);
 
