@@ -4,8 +4,6 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
 import org.apache.fury.Fury;
-import org.apache.fury.config.FuryBuilder;
-import org.apache.fury.config.Language;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
