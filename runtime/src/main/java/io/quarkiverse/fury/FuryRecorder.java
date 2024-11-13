@@ -24,7 +24,7 @@ public class FuryRecorder {
         // create the Fury instance from the config
         FuryBuilder builder = Fury.builder();
         builder.requireClassRegistration(config.requiredClassRegistration())
-                .withName("Fury-" + this.hashCode())
+                .withName("Fury-" + beanContainer.hashCode())
                 .withRefTracking(config.trackRef())
                 .withCompatibleMode(config.compatibleMode())
                 .withDeserializeNonexistentClass(config.deserializeNonexistentClass())
