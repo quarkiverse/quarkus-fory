@@ -1,5 +1,6 @@
 package io.quarkiverse.fury.it;
 
+import static io.quarkiverse.fury.it.FuryResources.BAR_CLASS_ID;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
@@ -32,7 +33,7 @@ public class FuryTest {
     public void testFuryBar() {
         Bar bar = new Bar(1, "hello bar");
         Fury fury = Fury.builder().requireClassRegistration(true).withName("Fury" + System.nanoTime()).build();
-        fury.register(Bar.class);
+        fury.register(Bar.class, BAR_CLASS_ID);
         fury.registerSerializer(Bar.class, BarSerializer.class);
 
         Response response = given().contentType("application/fury").body(fury.serialize(bar)).when()

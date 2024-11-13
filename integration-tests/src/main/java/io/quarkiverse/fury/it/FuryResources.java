@@ -19,6 +19,7 @@ import org.apache.fury.util.Preconditions;
 @Path("/fury")
 @ApplicationScoped
 public class FuryResources {
+    public final static short BAR_CLASS_ID = 400;
     @Inject
     BaseFury fury;
 
