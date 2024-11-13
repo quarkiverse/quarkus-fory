@@ -5,8 +5,10 @@ import java.util.Map;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
 
 import org.apache.fury.BaseFury;
 import org.apache.fury.Fury;
@@ -73,5 +75,16 @@ public class FuryResources {
         Struct struct2 = (Struct) fury.deserialize(fury.serialize(struct1));
 
         return struct1.equals(struct2);
+    }
+
+    @GET
+    @Path("/test")
+    @Produces("application/fury")
+    @Consumes("application/fury")
+    public Bar testBar(Bar obj) {
+        Preconditions.checkArgument(obj.f1() == 1, obj);
+        Preconditions.checkArgument(obj.f2().equals("hello bar"), obj);
+
+        return new Bar(2, "bye bar");
     }
 }
