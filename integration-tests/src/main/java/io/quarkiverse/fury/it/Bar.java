@@ -19,8 +19,10 @@
 
 package io.quarkiverse.fury.it;
 
+import static io.quarkiverse.fury.it.FuryResources.BAR_CLASS_ID;
+
 import io.quarkiverse.fury.FurySerialization;
 
-@FurySerialization(serializer = BarSerializer.class)
+@FurySerialization(serializer = BarSerializer.class, classId = BAR_CLASS_ID)
 public record Bar(int f1, String f2) {
 }
