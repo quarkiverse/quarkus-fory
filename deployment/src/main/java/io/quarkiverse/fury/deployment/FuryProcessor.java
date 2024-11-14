@@ -7,7 +7,6 @@ import org.jboss.jandex.AnnotationTarget;
 import org.jboss.jandex.DotName;
 
 import io.quarkiverse.fury.ClassicFurySerializer;
-import io.quarkiverse.fury.ClassicFurySerializerProducer;
 import io.quarkiverse.fury.FuryBuildTimeConfig;
 import io.quarkiverse.fury.FuryProducer;
 import io.quarkiverse.fury.FuryRecorder;
@@ -79,12 +78,8 @@ class FuryProcessor {
 
     @BuildStep
     public void registerResteasyClassicIntegration(Capabilities capabilities,
-            BuildProducer<ResteasyJaxrsProviderBuildItem> resteasyJaxrsProviderBuildItemBuildProducer,
-            BuildProducer<AdditionalBeanBuildItem> additionalBeans) {
+            BuildProducer<ResteasyJaxrsProviderBuildItem> resteasyJaxrsProviderBuildItemBuildProducer) {
         if (capabilities.isPresent(Capability.RESTEASY)) {
-            additionalBeans.produce(AdditionalBeanBuildItem.builder().setUnremovable()
-                    .addBeanClasses(ClassicFurySerializerProducer.class)
-                    .build());
             resteasyJaxrsProviderBuildItemBuildProducer
                     .produce(new ResteasyJaxrsProviderBuildItem(ClassicFurySerializer.class.getName()));
         }
