@@ -26,10 +26,10 @@ import io.quarkus.arc.Arc;
 @Provider
 @Consumes({ "application/fury", "application/*+fury" })
 @Produces({ "application/fury", "application/*+fury" })
-public class ClassicFurySerializer implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
+public class FurySerializer implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
     private BaseFury fury;
 
-    public ClassicFurySerializer() {
+    public FurySerializer() {
     }
 
     @Override

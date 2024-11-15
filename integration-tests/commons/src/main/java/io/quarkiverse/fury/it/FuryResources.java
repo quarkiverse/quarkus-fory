@@ -7,6 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 
@@ -16,8 +17,11 @@ import org.apache.fury.ThreadSafeFury;
 import org.apache.fury.serializer.Serializer;
 import org.apache.fury.util.Preconditions;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 @Path("/fury")
 @ApplicationScoped
+@RegisterForReflection
 public class FuryResources {
     public final static short BAR_CLASS_ID = 400;
     @Inject
@@ -78,7 +82,7 @@ public class FuryResources {
         return struct1.equals(struct2);
     }
 
-    @GET
+    @POST
     @Path("/test")
     @Produces("application/fury")
     @Consumes("application/fury")
