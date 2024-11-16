@@ -8,10 +8,9 @@ import org.apache.fury.Fury;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
-@QuarkusTest
 public class FuryTest {
 
     @Test
@@ -31,13 +30,15 @@ public class FuryTest {
 
     @Test
     public void testFuryBar() {
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+
         Bar bar = new Bar(1, "hello bar");
         Fury fury = Fury.builder().requireClassRegistration(true).withName("Fury" + System.nanoTime()).build();
         fury.register(Bar.class, BAR_CLASS_ID);
         fury.registerSerializer(Bar.class, BarSerializer.class);
 
         Response response = given().contentType("application/fury").body(fury.serialize(bar)).when()
-                .get("/fury/test").then().statusCode(200).contentType("application/fury").extract().response();
+                .post("/fury/test").then().statusCode(200).contentType("application/fury").extract().response();
 
         byte[] result = response.body().asByteArray();
         Bar bar2 = (Bar) fury.deserialize(result);
