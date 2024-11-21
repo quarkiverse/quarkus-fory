@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.apache.fury.BaseFury;
 import org.apache.fury.Fury;
 import org.apache.fury.ThreadSafeFury;
+import org.apache.fury.config.Config;
 import org.apache.fury.config.FuryBuilder;
 import org.apache.fury.resolver.ClassResolver;
 import org.apache.fury.serializer.Serializer;
@@ -19,6 +20,8 @@ import io.quarkus.runtime.annotations.Recorder;
 public class FuryRecorder {
     private static final Logger LOG = Logger.getLogger(FuryRecorder.class);
 
+    private Config config;
+
     public RuntimeValue<BaseFury> createFury(
             final FuryBuildTimeConfig config, final BeanContainer beanContainer) {
         // create the Fury instance from the config
@@ -32,7 +35,7 @@ public class FuryRecorder {
                 .withNumberCompressed(config.compressNumber())
                 .withStringCompressed(config.compressString());
         BaseFury fury = config.threadSafe() ? builder.buildThreadSafeFury() : builder.build();
-
+        this.config = new Config(builder);
         // register to the container
         beanContainer.beanInstance(FuryProducer.class).setFury(fury);
         return new RuntimeValue<>(fury);
@@ -61,28 +64,14 @@ public class FuryRecorder {
             final RuntimeValue<BaseFury> furyValue, final Class<?> clazz,
             final int classId, Class<? extends Serializer> serializer) {
         BaseFury fury = furyValue.getValue();
+        ClassResolver classResolver = getClassResolver(fury);
         if (classId > 0) {
             Preconditions.checkArgument(
                     classId >= 256 && classId <= Short.MAX_VALUE,
                     "Class id %s must be >= 256 and <= %s",
                     classId,
                     Short.MAX_VALUE);
-            Class<?> registeredClass;
-            if (fury instanceof ThreadSafeFury) {
-                ThreadSafeFury threadSafeFury = (ThreadSafeFury) fury;
-                registeredClass = (threadSafeFury).execute(f -> f.getClassResolver().getRegisteredClass((short) classId));
-                if (serializer == null) {
-                    // Generate serializer bytecode.
-                    threadSafeFury.execute(f -> f.getClassResolver().getSerializerClass(clazz));
-                }
-            } else {
-                ClassResolver classResolver = ((Fury) fury).getClassResolver();
-                registeredClass = classResolver.getRegisteredClass((short) classId);
-                if (serializer == null) {
-                    // Generate serializer bytecode.
-                    classResolver.getSerializerClass(clazz);
-                }
-            }
+            Class<?> registeredClass = classResolver.getRegisteredClass((short) classId);
             Preconditions.checkArgument(
                     registeredClass == null,
                     "ClassId %s has been registered for class %s",
@@ -91,10 +80,24 @@ public class FuryRecorder {
             fury.register(clazz, (short) classId);
         } else {
             // Generate serializer bytecode.
-            fury.register(clazz, serializer == null);
+            if (config.requireClassRegistration()) {
+                fury.register(clazz, serializer == null);
+            }
         }
         if (serializer != null) {
             fury.registerSerializer(clazz, serializer);
+        } else {
+            // Generate serializer bytecode.
+            classResolver.getSerializerClass(clazz);
+        }
+    }
+
+    private ClassResolver getClassResolver(BaseFury fury) {
+        if (fury instanceof ThreadSafeFury) {
+            ThreadSafeFury threadSafeFury = (ThreadSafeFury) fury;
+            return threadSafeFury.execute(Fury::getClassResolver);
+        } else {
+            return ((Fury) fury).getClassResolver();
         }
     }
 }
