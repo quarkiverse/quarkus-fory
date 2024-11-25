@@ -13,6 +13,7 @@ import io.quarkiverse.fury.FuryProducer;
 import io.quarkiverse.fury.FuryRecorder;
 import io.quarkiverse.fury.FurySerialization;
 import io.quarkiverse.fury.FurySerializer;
+import io.quarkiverse.fury.ReactiveFurySerializer;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.arc.deployment.BeanContainerBuildItem;
 import io.quarkus.arc.deployment.UnremovableBeanBuildItem;
@@ -90,12 +91,12 @@ class FuryProcessor {
                     .produce(new ResteasyJaxrsProviderBuildItem(FurySerializer.class.getName()));
         } else if (capabilities.isPresent(Capability.RESTEASY_REACTIVE)) {
             additionalReaders.produce(new MessageBodyReaderBuildItem.Builder(
-                    FurySerializer.class.getName(), Object.class.getName())
+                    ReactiveFurySerializer.class.getName(), Object.class.getName())
                     .setMediaTypeStrings(List.of("application/fury", "application/*+fury"))
                     .setRuntimeType(RuntimeType.SERVER)
                     .setBuiltin(true).build());
             additionalWriters.produce(new MessageBodyWriterBuildItem.Builder(
-                    FurySerializer.class.getName(), Object.class.getName())
+                    ReactiveFurySerializer.class.getName(), Object.class.getName())
                     .setMediaTypeStrings(List.of("application/fury", "application/*+fury"))
                     .setRuntimeType(RuntimeType.SERVER)
                     .setBuiltin(true).build());

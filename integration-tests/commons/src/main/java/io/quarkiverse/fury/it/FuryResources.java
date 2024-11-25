@@ -16,10 +16,7 @@ import org.apache.fury.ThreadSafeFury;
 import org.apache.fury.serializer.Serializer;
 import org.apache.fury.util.Preconditions;
 
-import io.quarkus.runtime.annotations.RegisterForReflection;
-
 @Path("/fury")
-@RegisterForReflection
 public class FuryResources {
     public final static short BAR_CLASS_ID = 400;
     @Inject
