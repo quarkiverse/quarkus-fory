@@ -98,9 +98,27 @@ quarkus.fury.register-class."io.demo.Foo".serializer=io.demo.FooSerializer
 
 For about how to create a customized Fury serializer for a class, see https://fury.apache.org/docs/guide/java_object_graph_guide#implement-a-customized-serializer[Apache Fury document]
 
+== Integartion in Quarkus REST/RESTEasy
+
+It enables efficient and structured data exchange between client and server using the fury during serialization and deserialization with `application/fury` media type. 
+Example for a JAX-RS endpoint on the server side like:
+
+[source,java,subs=attributes+]
+----
+@Path("/example")
+@Produces("application/fury")
+@Consumes("application/fury")
+public class ExampleResource {
+    @POST
+    public Foo test(Foo obj) {
+       return new Foo(1, "test");
+    }
+}
+----
+
+NOTE: The class ID (or serialization identifier) must be identical on both the client and server sides. A mismatch in the class ID will result in serialization or deserialization issues, potentially causing runtime errors or data corruption.
+
 [[extension-configuration-reference]]
 == Extension Configuration Reference
-
-TIP: Remove this section if you don't have Quarkus configuration properties in your extension.
 
 include::includes/quarkus-fury.adoc[leveloffset=+1,opts=optional]
