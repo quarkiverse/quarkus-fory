@@ -16,7 +16,6 @@ import io.quarkiverse.fury.FurySerializer;
 import io.quarkiverse.fury.ReactiveFurySerializer;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.arc.deployment.BeanContainerBuildItem;
-import io.quarkus.arc.deployment.UnremovableBeanBuildItem;
 import io.quarkus.deployment.Capabilities;
 import io.quarkus.deployment.Capability;
 import io.quarkus.deployment.annotations.BuildProducer;
@@ -25,6 +24,7 @@ import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import io.quarkus.resteasy.common.spi.ResteasyJaxrsProviderBuildItem;
 import io.quarkus.resteasy.reactive.spi.MessageBodyReaderBuildItem;
 import io.quarkus.resteasy.reactive.spi.MessageBodyWriterBuildItem;
@@ -48,9 +48,7 @@ class FuryProcessor {
     }
 
     @BuildStep
-    void unremovableBeans(
-            BuildProducer<AdditionalBeanBuildItem> beanProducer,
-            BuildProducer<UnremovableBeanBuildItem> unremovableBeans) {
+    void unremovableBeans(BuildProducer<AdditionalBeanBuildItem> beanProducer) {
         beanProducer.produce(AdditionalBeanBuildItem.unremovableOf(FuryProducer.class));
     }
 
@@ -86,20 +84,29 @@ class FuryProcessor {
             BuildProducer<ResteasyJaxrsProviderBuildItem> resteasyJaxrsProviderBuildItemBuildProducer,
             BuildProducer<MessageBodyReaderBuildItem> additionalReaders,
             BuildProducer<MessageBodyWriterBuildItem> additionalWriters) {
-        if (capabilities.isPresent(Capability.RESTEASY)) {
+        if (capabilities.isPresent(Capability.RESTEASY) || capabilities.isPresent(Capability.RESTEASY_CLIENT)) {
             resteasyJaxrsProviderBuildItemBuildProducer
                     .produce(new ResteasyJaxrsProviderBuildItem(FurySerializer.class.getName()));
         } else if (capabilities.isPresent(Capability.RESTEASY_REACTIVE)) {
-            additionalReaders.produce(new MessageBodyReaderBuildItem.Builder(
-                    ReactiveFurySerializer.class.getName(), Object.class.getName())
-                    .setMediaTypeStrings(List.of("application/fury", "application/*+fury"))
-                    .setRuntimeType(RuntimeType.SERVER)
-                    .setBuiltin(true).build());
-            additionalWriters.produce(new MessageBodyWriterBuildItem.Builder(
-                    ReactiveFurySerializer.class.getName(), Object.class.getName())
-                    .setMediaTypeStrings(List.of("application/fury", "application/*+fury"))
-                    .setRuntimeType(RuntimeType.SERVER)
-                    .setBuiltin(true).build());
+            registerHandler(RuntimeType.SERVER, additionalReaders, additionalWriters);
         }
+        if (capabilities.isPresent(Capability.REST_CLIENT_REACTIVE)) {
+            registerHandler(RuntimeType.CLIENT, additionalReaders, additionalWriters);
+        }
+    }
+
+    private void registerHandler(RuntimeType type,
+            BuildProducer<MessageBodyReaderBuildItem> additionalReaders,
+            BuildProducer<MessageBodyWriterBuildItem> additionalWriters) {
+        additionalReaders.produce(new MessageBodyReaderBuildItem.Builder(
+                ReactiveFurySerializer.class.getName(), Object.class.getName())
+                .setMediaTypeStrings(List.of("application/fury", "application/*+fury"))
+                .setRuntimeType(type)
+                .setBuiltin(true).build());
+        additionalWriters.produce(new MessageBodyWriterBuildItem.Builder(
+                ReactiveFurySerializer.class.getName(), Object.class.getName())
+                .setMediaTypeStrings(List.of("application/fury", "application/*+fury"))
+                .setRuntimeType(type)
+                .setBuiltin(true).build());
     }
 }
