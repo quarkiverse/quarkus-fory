@@ -5,15 +5,10 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.net.URL;
-
 import org.apache.fury.Fury;
-import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import io.quarkus.test.common.http.TestHTTPResource;
-import io.quarkus.test.junit.DisabledOnIntegrationTest;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
@@ -48,19 +43,6 @@ public class FuryTest {
 
         byte[] result = response.body().asByteArray();
         Bar bar2 = (Bar) fury.deserialize(result);
-        Assertions.assertEquals(bar2.f1(), 2);
-        Assertions.assertEquals(bar2.f2(), "bye bar");
-    }
-
-    @TestHTTPResource
-    URL url;
-
-    @Test
-    @DisabledOnIntegrationTest
-    public void testRestClient() {
-        Client client = RestClientBuilder.newBuilder().baseUrl(url).build(Client.class);
-        Bar obj = new Bar(1, "hello bar");
-        Bar bar2 = client.bar(obj);
         Assertions.assertEquals(bar2.f1(), 2);
         Assertions.assertEquals(bar2.f2(), "bye bar");
     }

@@ -83,7 +83,7 @@ class FuryProcessor {
             BuildProducer<ResteasyJaxrsProviderBuildItem> resteasyJaxrsProviderBuildItemBuildProducer,
             BuildProducer<MessageBodyReaderBuildItem> additionalReaders,
             BuildProducer<MessageBodyWriterBuildItem> additionalWriters) {
-        if (capabilities.isPresent(Capability.RESTEASY) || capabilities.isPresent(Capability.RESTEASY_CLIENT)) {
+        if (capabilities.isPresent(Capability.RESTEASY)) {
             resteasyJaxrsProviderBuildItemBuildProducer
                     .produce(new ResteasyJaxrsProviderBuildItem(FurySerializer.class.getName()));
         } else if (capabilities.isPresent(Capability.RESTEASY_REACTIVE)) {
