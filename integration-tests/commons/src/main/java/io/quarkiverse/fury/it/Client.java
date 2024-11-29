@@ -7,10 +7,11 @@ import jakarta.ws.rs.Produces;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
+@Path("/fury")
 @RegisterRestClient
 public interface Client {
     @POST
-    @Path("/fury/test")
+    @Path("/test")
     @Produces("application/fury")
     @Consumes("application/fury")
     Bar bar(Bar obj);
