@@ -22,6 +22,7 @@ import org.apache.fury.io.FuryInputStream;
 import org.apache.fury.resolver.ClassResolver;
 
 import io.quarkus.arc.Arc;
+import io.quarkus.arc.ArcContainer;
 
 @Provider
 @Consumes({ "application/fury", "application/*+fury" })
@@ -73,7 +74,10 @@ public class FurySerializer implements MessageBodyReader<Object>, MessageBodyWri
 
     protected BaseFury getFury() {
         if (fury == null) {
-            fury = Arc.container().instance(BaseFury.class).get();
+            ArcContainer container = Arc.container();
+            if (container != null) {
+                fury = container.instance(BaseFury.class).get();
+            }
         }
         return fury;
     }
