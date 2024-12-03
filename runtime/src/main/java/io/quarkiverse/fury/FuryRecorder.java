@@ -20,8 +20,6 @@ import io.quarkus.runtime.annotations.Recorder;
 public class FuryRecorder {
     private static final Logger LOG = Logger.getLogger(FuryRecorder.class);
 
-    private Config config;
-
     public RuntimeValue<BaseFury> createFury(
             final FuryBuildTimeConfig config, final BeanContainer beanContainer) {
         // create the Fury instance from the config
@@ -35,7 +33,6 @@ public class FuryRecorder {
                 .withNumberCompressed(config.compressNumber())
                 .withStringCompressed(config.compressString());
         BaseFury fury = config.threadSafe() ? builder.buildThreadSafeFury() : builder.build();
-        this.config = new Config(builder);
         // register to the container
         beanContainer.beanInstance(FuryProducer.class).setFury(fury);
         return new RuntimeValue<>(fury);
@@ -65,6 +62,7 @@ public class FuryRecorder {
             final int classId, Class<? extends Serializer> serializer) {
         BaseFury fury = furyValue.getValue();
         ClassResolver classResolver = getClassResolver(fury);
+        Config config = classResolver.getFury().getConfig();
         if (classId > 0) {
             Preconditions.checkArgument(
                     classId >= 256 && classId <= Short.MAX_VALUE,

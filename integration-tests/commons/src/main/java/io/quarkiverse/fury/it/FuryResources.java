@@ -81,6 +81,15 @@ public class FuryResources {
     }
 
     @POST
+    @Path("/struct")
+    @Produces("application/fury")
+    @Consumes("application/fury")
+    public Struct testStruct(Struct obj) {
+        Preconditions.checkArgument(obj.equals(Struct.create()), obj);
+        return Struct.create();
+    }
+
+    @POST
     @Path("/test")
     @Produces("application/fury")
     @Consumes("application/fury")
