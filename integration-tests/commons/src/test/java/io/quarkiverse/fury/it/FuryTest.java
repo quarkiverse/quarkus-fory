@@ -35,7 +35,7 @@ public class FuryTest {
         Struct struct = Struct.create();
         Fury fury = Fury.builder().requireClassRegistration(true).withName("Fury" + System.nanoTime()).build();
         Response response = given().contentType("application/fury").body(fury.serialize(struct)).when()
-          .post("/fury/struct").then().statusCode(200).contentType("application/fury").extract().response();
+                .post("/fury/struct").then().statusCode(200).contentType("application/fury").extract().response();
         byte[] result = response.body().asByteArray();
         Struct struct1 = (Struct) fury.deserialize(result);
         Assertions.assertEquals(struct1, struct);
