@@ -33,7 +33,7 @@ public class FuryTest {
     public void testFuryStruct() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         Struct struct = Struct.create();
-        Fury fury = Fury.builder().requireClassRegistration(true).withName("Fury" + System.nanoTime()).build();
+        Fury fury = Fury.builder().requireClassRegistration(false).withName("Fury" + System.nanoTime()).build();
         Response response = given().contentType("application/fury").body(fury.serialize(struct)).when()
                 .post("/fury/struct").then().statusCode(200).contentType("application/fury").extract().response();
         byte[] result = response.body().asByteArray();
