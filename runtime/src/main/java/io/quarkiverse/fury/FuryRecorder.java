@@ -1,5 +1,7 @@
 package io.quarkiverse.fury;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Optional;
 
 import org.apache.fury.BaseFury;
@@ -87,7 +89,14 @@ public class FuryRecorder {
             fury.registerSerializer(clazz, serializer);
         } else {
             // Generate serializer bytecode.
-            classResolver.getSerializerClass(clazz);
+            try {
+                Method createSerializerAhead = ClassResolver.class.getDeclaredMethod(
+                  "createSerializerAhead", Class.class);
+                createSerializerAhead.setAccessible(true);
+                createSerializerAhead.invoke(classResolver, clazz);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
