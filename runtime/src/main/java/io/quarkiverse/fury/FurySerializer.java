@@ -22,6 +22,7 @@ import org.apache.fury.io.FuryInputStream;
 import org.apache.fury.resolver.ClassResolver;
 
 import io.quarkus.arc.Arc;
+import io.quarkus.arc.ArcContainer;
 
 @Provider
 @Consumes({ "application/fury", "application/*+fury" })
@@ -58,11 +59,11 @@ public class FurySerializer implements MessageBodyReader<Object>, MessageBodyWri
         outputStream.write(getFury().serialize(obj));
     }
 
-    private boolean isSupportedMediaType(MediaType mediaType) {
+    protected boolean isSupportedMediaType(MediaType mediaType) {
         return mediaType.getType().equals("application") && mediaType.getSubtype().endsWith("fury");
     }
 
-    private boolean canSerialize(final Class<?> aClass) {
+    protected boolean canSerialize(final Class<?> aClass) {
         if (getFury() instanceof final ThreadSafeFury threadSafeFury) {
             return (threadSafeFury).execute(f -> f.getClassResolver().getRegisteredClassId(aClass)) != null;
         } else {
@@ -71,10 +72,14 @@ public class FurySerializer implements MessageBodyReader<Object>, MessageBodyWri
         }
     }
 
-    private BaseFury getFury() {
+    protected BaseFury getFury() {
         if (fury == null) {
-            fury = Arc.container().instance(BaseFury.class).get();
+            ArcContainer container = Arc.container();
+            if (container != null) {
+                fury = container.instance(BaseFury.class).get();
+            }
         }
         return fury;
     }
+
 }

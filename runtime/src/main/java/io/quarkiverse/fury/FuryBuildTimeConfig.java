@@ -15,6 +15,10 @@ import io.smallrye.config.WithDefault;
 @ConfigRoot(phase = ConfigPhase.BUILD_AND_RUN_TIME_FIXED)
 @ConfigMapping(prefix = "quarkus.fury")
 public interface FuryBuildTimeConfig {
+    /** The language of fury. The default is JAVA. */
+    @WithDefault("JAVA")
+    FuryLanguage language();
+
     /** Require class registration for serialization. The default is true. */
     @WithDefault("true")
     boolean requiredClassRegistration();

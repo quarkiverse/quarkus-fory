@@ -25,6 +25,7 @@ public class FuryRecorder {
         // create the Fury instance from the config
         FuryBuilder builder = Fury.builder();
         builder.requireClassRegistration(config.requiredClassRegistration())
+                .withLanguage(config.language().format)
                 .withName("Fury-" + System.nanoTime())
                 .withRefTracking(config.trackRef())
                 .withCompatibleMode(config.compatibleMode())

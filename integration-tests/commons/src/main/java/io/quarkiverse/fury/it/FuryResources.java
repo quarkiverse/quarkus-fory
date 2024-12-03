@@ -15,15 +15,17 @@ import org.apache.fury.Fury;
 import org.apache.fury.ThreadSafeFury;
 import org.apache.fury.serializer.Serializer;
 import org.apache.fury.util.Preconditions;
-
-import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @Path("/fury")
-@RegisterForReflection
 public class FuryResources {
     public final static short BAR_CLASS_ID = 400;
     @Inject
     BaseFury fury;
+
+    @Inject
+    @RestClient
+    Client client;
 
     @GET
     @Path("/record")
@@ -98,5 +100,13 @@ public class FuryResources {
         Preconditions.checkArgument(obj.f2().equals("hello bar"), obj);
 
         return new Bar(2, "bye bar");
+    }
+
+    @GET
+    @Path("/client")
+    @Produces("application/json")
+    public Bar client() {
+        Bar obj = new Bar(1, "hello bar");
+        return client.bar(obj);
     }
 }

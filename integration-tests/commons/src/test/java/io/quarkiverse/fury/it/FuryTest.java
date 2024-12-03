@@ -3,6 +3,7 @@ package io.quarkiverse.fury.it;
 import static io.quarkiverse.fury.it.FuryResources.BAR_CLASS_ID;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.fury.Fury;
 import org.junit.jupiter.api.Assertions;
