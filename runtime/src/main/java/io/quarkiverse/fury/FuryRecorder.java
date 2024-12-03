@@ -91,7 +91,7 @@ public class FuryRecorder {
             // Generate serializer bytecode.
             try {
                 Method createSerializerAhead = ClassResolver.class.getDeclaredMethod(
-                  "createSerializerAhead", Class.class);
+                        "createSerializerAhead", Class.class);
                 createSerializerAhead.setAccessible(true);
                 createSerializerAhead.invoke(classResolver, clazz);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
