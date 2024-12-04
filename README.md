@@ -59,6 +59,7 @@ classes annotated by `@FurySerialization` for deserialization, the deserializati
 enabled.
 
 ### Class registration enabled
+Server example:
 ```java
 import io.quarkiverse.fury.FurySerialization;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -82,7 +83,7 @@ public class FuryResources {
 }
 ```
 
-Client example
+Client example:
 ```java
 import static io.restassured.RestAssured.given;
 import org.apache.fury.ThreadSafeFury;
