@@ -54,7 +54,9 @@ The usage will be different if class registration is disabled or enabled:
 `@FurySerialization(classId = xxx)`, otherwise Fury will allocate an auto-generated ID which you won't know at the 
 client for registration.
 - Disable class registration: no class id are needed to register, which is more easy to use, but the serialized size
-will be larger since Fury will serialize class as a string instead of an id.
+will be larger since Fury will serialize class as a string instead of an id. Note that `quarkus-fury` will only allow 
+classes annotated by `@FurySerialization` for deserialization, the deserialization will be safe as class registration
+enabled.
 
 ### Class registration enabled
 ```java
