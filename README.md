@@ -45,8 +45,7 @@ public class FuryResources {
 }
 ```
 
-## Use Apache Fury with Reactive Rest
-
+## Use Apache Fury with Quarkus REST/RESTEasy
 You can send a http request with Fury protocol, and let Fury to handle your objects serialization.
 
 The usage will be different if class registration is disabled or enabled:
