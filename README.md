@@ -45,6 +45,103 @@ public class FuryResources {
 }
 ```
 
+## Use Apache Fury with Reactive Rest
+
+You can send a http request with Fury protocol, and let Fury to handle your objects serialization.
+
+The usage will be different if class registration is disabled or enabled:
+- Enable class registration: you must register class with same ID as the server, you should assign an id using
+`@FurySerialization(classId = xxx)`, otherwise Fury will allocate an auto-generated ID which you won't know at the 
+client for registration.
+- Disable class registration: no class id are needed to register, which is more easy to use, but the serialized size
+will be larger since Fury will serialize class as a string instead of an id.
+
+### Class registration enabled
+```java
+import io.quarkiverse.fury.FurySerialization;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+
+@FurySerialization(classId = 100)
+record Struct(int f1, String f2) {
+}
+
+@Path("/fury")
+@ApplicationScoped
+public class FuryResources {
+  @POST
+  @Path("/struct")
+  @Produces("application/fury")
+  @Consumes("application/fury")
+  public Struct testStruct(Struct obj) {
+    return new Struct(10, "abc");
+  }
+}
+```
+
+Client example
+```java
+import static io.restassured.RestAssured.given;
+import org.apache.fury.ThreadSafeFury;
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
+
+public class FuryClient {
+  private static ThreadSafeFury fury = Fury.builder().requireClassRegistration(false).buildThreadSafeFury();
+  static {
+    fury.register(Struct.class, 100, true);
+  }
+
+  public static void main(String[] args) {
+    RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+    Struct struct = Struct.create();
+    Response response = given().contentType("application/fury").body(fury.serialize(struct)).when()
+      .post("/fury/struct").then().statusCode(200).contentType("application/fury").extract().response();
+    byte[] result = response.body().asByteArray();
+    Struct struct1 = (Struct) fury.deserialize(result);
+    System.out.println(struct1);
+  }
+}
+```
+
+### Class registration disabled
+Server example:
+```java
+@FurySerialization
+record Struct(int f1, String f2) {
+}
+
+@Path("/fury")
+@ApplicationScoped
+public class FuryResources {
+  @POST
+  @Path("/struct")
+  @Produces("application/fury")
+  @Consumes("application/fury")
+  public Struct testStruct(Struct obj) {
+    return new Struct(10, "abc");
+  }
+}
+```
+
+Client example
+```java
+public class RestClient {
+  private static ThreadSafeFury fury = Fury.builder().requireClassRegistration(false).buildThreadSafeFury();
+
+  public static void main(String[] args) {
+    RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+    Struct struct = Struct.create();
+    Response response = given().contentType("application/fury").body(fury.serialize(struct)).when()
+      .post("/fury/struct").then().statusCode(200).contentType("application/fury").extract().response();
+    byte[] result = response.body().asByteArray();
+    Struct struct1 = (Struct) fury.deserialize(result);
+    System.out.println(struct1);
+  }
+}
+```
+
 More details about usage can be found [here](https://docs.quarkiverse.io/quarkus-fury/dev/index.html).
 
 ## Contributors ✨
