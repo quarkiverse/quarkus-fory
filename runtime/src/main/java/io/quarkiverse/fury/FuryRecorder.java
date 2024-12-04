@@ -3,14 +3,19 @@ package io.quarkiverse.fury;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.function.Function;
 
 import org.apache.fury.BaseFury;
 import org.apache.fury.Fury;
+import org.apache.fury.ThreadLocalFury;
 import org.apache.fury.ThreadSafeFury;
 import org.apache.fury.config.Config;
 import org.apache.fury.config.FuryBuilder;
+import org.apache.fury.resolver.ClassChecker;
 import org.apache.fury.resolver.ClassResolver;
 import org.apache.fury.serializer.Serializer;
+import org.apache.fury.util.GraalvmSupport;
 import org.apache.fury.util.Preconditions;
 import org.jboss.logging.Logger;
 
@@ -21,6 +26,9 @@ import io.quarkus.runtime.annotations.Recorder;
 @Recorder
 public class FuryRecorder {
     private static final Logger LOG = Logger.getLogger(FuryRecorder.class);
+    private static final ConcurrentSkipListSet<String> annotatedClasses = new ConcurrentSkipListSet<>();
+    private static final ClassChecker checker = (classResolver, className) -> !GraalvmSupport.isGraalRuntime()
+            || annotatedClasses.contains(className);
 
     public RuntimeValue<BaseFury> createFury(
             final FuryBuildTimeConfig config, final BeanContainer beanContainer) {
@@ -35,7 +43,13 @@ public class FuryRecorder {
                 .deserializeNonexistentEnumValueAsNull(config.deserializeNonexistentEnumValueAsNull())
                 .withNumberCompressed(config.compressNumber())
                 .withStringCompressed(config.compressString());
-        BaseFury fury = config.threadSafe() ? builder.buildThreadSafeFury() : builder.build();
+        Function<ClassLoader, Fury> furyFactory = c -> {
+            Fury f = builder.withClassLoader(c).build();
+            f.getClassResolver().setClassChecker(checker);
+            return f;
+        };
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        BaseFury fury = config.threadSafe() ? new ThreadLocalFury(furyFactory) : furyFactory.apply(classLoader);
         // register to the container
         beanContainer.beanInstance(FuryProducer.class).setFury(fury);
         return new RuntimeValue<>(fury);
@@ -51,6 +65,7 @@ public class FuryRecorder {
                         .loadClass(serializerClassName.get());
             }
             registerClass(furyValue, clazz, classId, serializer);
+            annotatedClasses.add(className);
         } catch (ClassNotFoundException e) {
             LOG.warn("can not find register class: " + className
                     + (serializerClassName.isPresent()
@@ -63,6 +78,7 @@ public class FuryRecorder {
     public void registerClass(
             final RuntimeValue<BaseFury> furyValue, final Class<?> clazz,
             final int classId, Class<? extends Serializer> serializer) {
+        annotatedClasses.add(clazz.getName());
         BaseFury fury = furyValue.getValue();
         ClassResolver classResolver = getClassResolver(fury);
         Config config = classResolver.getFury().getConfig();
