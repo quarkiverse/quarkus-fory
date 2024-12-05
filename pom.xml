@@ -9,7 +9,7 @@
     </parent>
     <groupId>io.quarkiverse.fury</groupId>
     <artifactId>quarkus-fury-parent</artifactId>
-    <version>0.2.0</version>
+    <version>999-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Quarkus Fury - Parent</name>
 
@@ -22,7 +22,7 @@
         <connection>scm:git:git@github.com:quarkiverse/quarkus-fury.git</connection>
         <developerConnection>scm:git:git@github.com:quarkiverse/quarkus-fury.git</developerConnection>
         <url>https://github.com/quarkiverse/quarkus-fury</url>
-      <tag>0.2.0</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <properties>
