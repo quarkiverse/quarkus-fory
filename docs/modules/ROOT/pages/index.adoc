@@ -116,7 +116,8 @@ public class ExampleResource {
 }
 ----
 
-NOTE: The class ID (or serialization identifier) must be identical on both the client and server sides. A mismatch in the class ID will result in serialization or deserialization issues, potentially causing runtime errors or data corruption.
+NOTE: If class registration is enabled, the class ID (or serialization identifier) must be identical on both the client and server sides. A mismatch in the class ID will result in serialization or deserialization issues, potentially causing runtime errors or data corruption.
+If class registration is disabled, please do not assign class id at client and server slides.
 
 [[extension-configuration-reference]]
 == Extension Configuration Reference

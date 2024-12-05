@@ -3,7 +3,6 @@ package io.quarkiverse.fury.it;
 import static io.quarkiverse.fury.it.FuryResources.BAR_CLASS_ID;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.fury.Fury;
 import org.junit.jupiter.api.Assertions;
@@ -27,6 +26,18 @@ public class FuryTest {
     @Test
     public void testThirdPartyBar() {
         given().when().get("/fury/third_party_bar").then().statusCode(200).body(is("true"));
+    }
+
+    @Test
+    public void testFuryStruct() {
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+        Struct struct = Struct.create();
+        Fury fury = Fury.builder().requireClassRegistration(false).withName("Fury" + System.nanoTime()).build();
+        Response response = given().contentType("application/fury").body(fury.serialize(struct)).when()
+                .post("/fury/struct").then().statusCode(200).contentType("application/fury").extract().response();
+        byte[] result = response.body().asByteArray();
+        Struct struct1 = (Struct) fury.deserialize(result);
+        Assertions.assertEquals(struct1, struct);
     }
 
     @Test

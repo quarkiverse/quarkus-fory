@@ -20,6 +20,8 @@ import org.apache.fury.Fury;
 import org.apache.fury.ThreadSafeFury;
 import org.apache.fury.io.FuryInputStream;
 import org.apache.fury.resolver.ClassResolver;
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.ConfigProvider;
 
 import io.quarkus.arc.Arc;
 import io.quarkus.arc.ArcContainer;
@@ -64,6 +66,11 @@ public class FurySerializer implements MessageBodyReader<Object>, MessageBodyWri
     }
 
     protected boolean canSerialize(final Class<?> aClass) {
+        Config config = ConfigProvider.getConfig();
+        Boolean requiredClassRegistration = config.getValue("quarkus.fury.required-class-registration", Boolean.class);
+        if (!requiredClassRegistration) {
+            return true;
+        }
         if (getFury() instanceof final ThreadSafeFury threadSafeFury) {
             return (threadSafeFury).execute(f -> f.getClassResolver().getRegisteredClassId(aClass)) != null;
         } else {
