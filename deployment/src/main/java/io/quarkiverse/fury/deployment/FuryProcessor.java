@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import jakarta.ws.rs.RuntimeType;
 
+import org.apache.fury.serializer.Serializer;
 import org.jboss.jandex.AnnotationTarget;
 import org.jboss.jandex.DotName;
 
@@ -56,7 +57,10 @@ class FuryProcessor {
     public void registerClasses(FuryBuildTimeConfig configs,
             FuryBuildItem fury, List<FurySerializerBuildItem> classes, FuryRecorder recorder) {
         for (FurySerializerBuildItem item : classes) {
-            recorder.registerClass(fury.getFury(), item.getClazz(), item.getClassId(), item.getSerializer());
+            Class<? extends Serializer> serializer = null;
+            if (item.getSerializer() != Serializer.class)
+                serializer = item.getSerializer();
+            recorder.registerClass(fury.getFury(), item.getClazz(), item.getClassId(), serializer);
         }
 
         if (configs.registerClassNames().isPresent()) {
