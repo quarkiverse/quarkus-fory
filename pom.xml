@@ -27,7 +27,7 @@
 
     <properties>
         <quarkus.version>3.18.3</quarkus.version>
-        <fury.version>0.9.0</fury.version>
+        <fury.version>0.10.0</fury.version>
         <jandex-maven-plugin.version>1.2.3</jandex-maven-plugin.version>
     </properties>
 
