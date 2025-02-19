@@ -8,6 +8,10 @@ h|Type
 h|Default
 
 a|icon:lock[title=Fixed at build time] [[quarkus-fury_quarkus-fury-language]] [.property-path]##link:#quarkus-fury_quarkus-fury-language[`quarkus.fury.language`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fury.language+++[]
+endif::add-copy-button-to-config-props[]
+
 
 [.description]
 --
@@ -25,6 +29,10 @@ a|`java`, `xlang`
 |`java`
 
 a|icon:lock[title=Fixed at build time] [[quarkus-fury_quarkus-fury-required-class-registration]] [.property-path]##link:#quarkus-fury_quarkus-fury-required-class-registration[`quarkus.fury.required-class-registration`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fury.required-class-registration+++[]
+endif::add-copy-button-to-config-props[]
+
 
 [.description]
 --
@@ -42,6 +50,10 @@ endif::add-copy-button-to-env-var[]
 |`true`
 
 a|icon:lock[title=Fixed at build time] [[quarkus-fury_quarkus-fury-track-ref]] [.property-path]##link:#quarkus-fury_quarkus-fury-track-ref[`quarkus.fury.track-ref`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fury.track-ref+++[]
+endif::add-copy-button-to-config-props[]
+
 
 [.description]
 --
@@ -59,6 +71,10 @@ endif::add-copy-button-to-env-var[]
 |`false`
 
 a|icon:lock[title=Fixed at build time] [[quarkus-fury_quarkus-fury-compatible-mode]] [.property-path]##link:#quarkus-fury_quarkus-fury-compatible-mode[`quarkus.fury.compatible-mode`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fury.compatible-mode+++[]
+endif::add-copy-button-to-config-props[]
+
 
 [.description]
 --
@@ -78,6 +94,10 @@ a|`schema-consistent`, `compatible`
 |`schema-consistent`
 
 a|icon:lock[title=Fixed at build time] [[quarkus-fury_quarkus-fury-compress-number]] [.property-path]##link:#quarkus-fury_quarkus-fury-compress-number[`quarkus.fury.compress-number`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fury.compress-number+++[]
+endif::add-copy-button-to-config-props[]
+
 
 [.description]
 --
@@ -95,6 +115,10 @@ endif::add-copy-button-to-env-var[]
 |`true`
 
 a|icon:lock[title=Fixed at build time] [[quarkus-fury_quarkus-fury-compress-string]] [.property-path]##link:#quarkus-fury_quarkus-fury-compress-string[`quarkus.fury.compress-string`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fury.compress-string+++[]
+endif::add-copy-button-to-config-props[]
+
 
 [.description]
 --
@@ -112,6 +136,10 @@ endif::add-copy-button-to-env-var[]
 |`true`
 
 a|icon:lock[title=Fixed at build time] [[quarkus-fury_quarkus-fury-deserialize-nonexistent-class]] [.property-path]##link:#quarkus-fury_quarkus-fury-deserialize-nonexistent-class[`quarkus.fury.deserialize-nonexistent-class`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fury.deserialize-nonexistent-class+++[]
+endif::add-copy-button-to-config-props[]
+
 
 [.description]
 --
@@ -129,6 +157,10 @@ endif::add-copy-button-to-env-var[]
 |`false`
 
 a|icon:lock[title=Fixed at build time] [[quarkus-fury_quarkus-fury-deserialize-nonexistent-enum-value-as-null]] [.property-path]##link:#quarkus-fury_quarkus-fury-deserialize-nonexistent-enum-value-as-null[`quarkus.fury.deserialize-nonexistent-enum-value-as-null`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fury.deserialize-nonexistent-enum-value-as-null+++[]
+endif::add-copy-button-to-config-props[]
+
 
 [.description]
 --
@@ -146,6 +178,10 @@ endif::add-copy-button-to-env-var[]
 |`false`
 
 a|icon:lock[title=Fixed at build time] [[quarkus-fury_quarkus-fury-thread-safe]] [.property-path]##link:#quarkus-fury_quarkus-fury-thread-safe[`quarkus.fury.thread-safe`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fury.thread-safe+++[]
+endif::add-copy-button-to-config-props[]
+
 
 [.description]
 --
@@ -163,6 +199,10 @@ endif::add-copy-button-to-env-var[]
 |`true`
 
 a|icon:lock[title=Fixed at build time] [[quarkus-fury_quarkus-fury-register-class-names]] [.property-path]##link:#quarkus-fury_quarkus-fury-register-class-names[`quarkus.fury.register-class-names`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fury.register-class-names+++[]
+endif::add-copy-button-to-config-props[]
+
 
 [.description]
 --
@@ -184,6 +224,10 @@ h|Type
 h|Default
 
 a|icon:lock[title=Fixed at build time] [[quarkus-fury_quarkus-fury-register-class-register-class-name-class-id]] [.property-path]##link:#quarkus-fury_quarkus-fury-register-class-register-class-name-class-id[`quarkus.fury.register-class."register-class-name".class-id`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fury.register-class."register-class-name".class-id+++[]
+endif::add-copy-button-to-config-props[]
+
 
 [.description]
 --
@@ -201,6 +245,10 @@ endif::add-copy-button-to-env-var[]
 |`-1`
 
 a|icon:lock[title=Fixed at build time] [[quarkus-fury_quarkus-fury-register-class-register-class-name-serializer]] [.property-path]##link:#quarkus-fury_quarkus-fury-register-class-register-class-name-serializer[`quarkus.fury.register-class."register-class-name".serializer`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fury.register-class."register-class-name".serializer+++[]
+endif::add-copy-button-to-config-props[]
+
 
 [.description]
 --
