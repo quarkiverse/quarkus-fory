@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.quarkiverse.fury</groupId>
         <artifactId>quarkus-fury-parent</artifactId>
-        <version>999-SNAPSHOT</version>
+        <version>0.3.1</version>
     </parent>
     <artifactId>quarkus-fury-integration-tests</artifactId>
     <name>Quarkus Fury - Integration Tests</name>
