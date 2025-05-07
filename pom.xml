@@ -26,7 +26,7 @@
   </scm>
 
     <properties>
-        <quarkus.version>3.22.1</quarkus.version>
+        <quarkus.version>3.22.2</quarkus.version>
         <fury.version>0.10.2</fury.version>
         <jandex-maven-plugin.version>1.2.3</jandex-maven-plugin.version>
     </properties>
