@@ -1,15 +1,15 @@
-name: Fury
+name: Fory
 metadata:
   keywords:
-    - fury
+    - fory
     - serialization
     - rpc
     - performance
     - encoding
     - codec
-  icon-url: https://raw.githubusercontent.com/apache/fury/main/docs/images/logo/fury-logo.svg
+  icon-url: https://raw.githubusercontent.com/apache/fory/main/docs/images/logo/fory-icon.png
   sponsor: "Apache Software Foundation"
-  guide: https://docs.quarkiverse.io/quarkus-fury/dev/index.html
+  guide: https://docs.quarkiverse.io/quarkus-fory/dev/index.html
   categories:
     - "data"
   status: "preview"

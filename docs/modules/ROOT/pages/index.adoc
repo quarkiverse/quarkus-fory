@@ -1,60 +1,60 @@
-= Quarkus Fury
+= Quarkus Fory
 
 include::./includes/attributes.adoc[]
 
-Integrates with the Apache Fury serialization framework. https://github.com/apache/fury[Apache Fury] is a blazingly fast multi-language serialization framework powered by JIT and zero-copy. With the `quarkus-fury` extension, users can use fast and easy-to-use serialization feature provided by Apache Fury out-of-box.
+Integrates with the Apache Fory serialization framework. https://github.com/apache/fory[Apache Fory] is a blazingly fast multi-language serialization framework powered by JIT and zero-copy. With the `quarkus-fory` extension, users can use fast and easy-to-use serialization feature provided by Apache Fory out-of-box.
 
 
 == Installation
 
-If you want to use this extension, you need to add the `io.quarkiverse.fury:quarkus-fury` extension first to your build file.
+If you want to use this extension, you need to add the `io.quarkiverse.fory:quarkus-fory` extension first to your build file.
 
 For instance, with Maven, add the following dependency to your POM file:
 
 [source,xml,subs=attributes+]
 ----
 <dependency>
-    <groupId>io.quarkiverse.fury</groupId>
-    <artifactId>quarkus-fury</artifactId>
+    <groupId>io.quarkiverse.fory</groupId>
+    <artifactId>quarkus-fory</artifactId>
     <version>{project-version}</version>
 </dependency>
 ----
 
 == Usage
 
-If you want to use Apache Fury to serialize your objects, you need to use `@Inject` to get an instance of `Fury` to serialize your objects. `Fury` instance is created by `quarkus-fury` at build time, you don't need to create `Fury` by yourself.
+If you want to use Apache Fory to serialize your objects, you need to use `@Inject` to get an instance of `Fory` to serialize your objects. `Fory` instance is created by `quarkus-fory` at build time, you don't need to create `Fory` by yourself.
 And you also need to mark your classes for serialization.
 
-For instance, the following code is an example using `@Inject` and `@FurySerialization` annotation to serialize a JDK 17+ `record` object.
+For instance, the following code is an example using `@Inject` and `@ForySerialization` annotation to serialize a JDK 17+ `record` object.
 
 [source,java,subs=attributes+]
 ----
 import java.util.List;
 import java.util.Map;
 
-import io.quarkiverse.fury.FurySerialization;
+import io.quarkiverse.fory.ForySerialization;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 
-import org.apache.fury.BaseFury;
+import org.apache.fory.BaseFory;
 
-@FurySerialization
+@ForySerialization
 record Foo(int f1, String f2, List<String> f3, Map<String, Long> f4) {
 }
 
-@Path("/fury")
+@Path("/fory")
 @ApplicationScoped
-public class FuryResources {
+public class ForyResources {
   @Inject
-  BaseFury fury;
+  BaseFory fory;
 
   @GET
   @Path("/record")
   public Boolean testSerializeFooRecord() {
     Foo foo1 = new Foo(10, "abc", List.of("str1", "str2"), Map.of("k1", 10L, "k2", 20L));
-    Foo foo2 = (Foo) fury.deserialize(fury.serialize(foo1));
+    Foo foo2 = (Foo) fory.deserialize(fory.serialize(foo1));
     return foo1.equals(foo2);
   }
 }
@@ -64,16 +64,16 @@ You can also mark a class for serialization by `application.properties` configur
 
 [source,properties,subs=attributes+]
 ----
-quarkus.fury.register-class-names=io.demo.Foo,io.demo.Bar
+quarkus.fory.register-class-names=io.demo.Foo,io.demo.Bar
 ----
 
 If you want to specify class id or serializer for a class, you can do it by annotation:
 
 [source,java,subs=attributes+]
 ----
-import io.quarkiverse.fury.FurySerialization;
+import io.quarkiverse.fory.ForySerialization;
 
-@FurySerialization(classId = 200, serializer = FooSerializer.class)
+@ForySerialization(classId = 200, serializer = FooSerializer.class)
 record Foo(int f1, String f2, List<String> f3, Map<String, Long> f4) {
 }
 ----
@@ -81,9 +81,9 @@ record Foo(int f1, String f2, List<String> f3, Map<String, Long> f4) {
 If the class is a third-party class which you can't add annotation, you can specify the `targetClasses` property:
 [source,java,subs=attributes+]
 ----
-import io.quarkiverse.fury.FurySerialization;
+import io.quarkiverse.fory.ForySerialization;
 
-@FurySerialization(classId = 200, serializer = FooSerializer.class, targetClasses = Foo.class)
+@ForySerialization(classId = 200, serializer = FooSerializer.class, targetClasses = Foo.class)
 public class FooConfig {
 }
 ----
@@ -92,22 +92,22 @@ Or you can configure by `application.properties` configurations.
 
 [source,properties,subs=attributes+]
 ----
-quarkus.fury.register-class."io.demo.Foo".class-id=200
-quarkus.fury.register-class."io.demo.Foo".serializer=io.demo.FooSerializer
+quarkus.fory.register-class."io.demo.Foo".class-id=200
+quarkus.fory.register-class."io.demo.Foo".serializer=io.demo.FooSerializer
 ----
 
-For about how to create a customized Fury serializer for a class, see https://fury.apache.org/docs/guide/java_object_graph_guide#implement-a-customized-serializer[Apache Fury document]
+For about how to create a customized Fory serializer for a class, see https://fory.apache.org/docs/guide/java_object_graph_guide#implement-a-customized-serializer[Apache Fory document]
 
 == Integartion in Quarkus REST/RESTEasy
 
-It enables efficient and structured data exchange between client and server using the fury during serialization and deserialization with `application/fury` media type. 
+It enables efficient and structured data exchange between client and server using the fory during serialization and deserialization with `application/fory` media type. 
 Example for a JAX-RS endpoint on the server side like:
 
 [source,java,subs=attributes+]
 ----
 @Path("/example")
-@Produces("application/fury")
-@Consumes("application/fury")
+@Produces("application/fory")
+@Consumes("application/fory")
 public class ExampleResource {
     @POST
     public Foo test(Foo obj) {
@@ -122,4 +122,4 @@ If class registration is disabled, please do not assign class id at client and s
 [[extension-configuration-reference]]
 == Extension Configuration Reference
 
-include::includes/quarkus-fury.adoc[leveloffset=+1,opts=optional]
+include::includes/quarkus-fory.adoc[leveloffset=+1,opts=optional]

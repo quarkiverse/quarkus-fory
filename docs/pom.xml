@@ -2,20 +2,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>io.quarkiverse.fury</groupId>
-        <artifactId>quarkus-fury-parent</artifactId>
+        <groupId>io.quarkiverse.fory</groupId>
+        <artifactId>quarkus-fory-parent</artifactId>
         <version>999-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>quarkus-fury-docs</artifactId>
-    <name>Quarkus Fury - Documentation</name>
+    <artifactId>quarkus-fory-docs</artifactId>
+    <name>Quarkus Fory - Documentation</name>
 
     <dependencies>
         <!-- Make sure the doc is built after the other artifacts -->
         <dependency>
-            <groupId>io.quarkiverse.fury</groupId>
-            <artifactId>quarkus-fury-deployment</artifactId>
+            <groupId>io.quarkiverse.fory</groupId>
+            <artifactId>quarkus-fory-deployment</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
