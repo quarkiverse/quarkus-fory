@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.quarkiverse.fory</groupId>
         <artifactId>quarkus-fory-integration-tests</artifactId>
-        <version>999-SNAPSHOT</version>
+        <version>0.4.0</version>
     </parent>
     <artifactId>quarkus-fory-integration-tests-reactive-rest</artifactId>
     <name>Quarkus Fory - Integration Tests - Reactive Rest</name>
