@@ -7,11 +7,11 @@
         <artifactId>quarkiverse-parent</artifactId>
         <version>20</version>
     </parent>
-    <groupId>io.quarkiverse.fury</groupId>
-    <artifactId>quarkus-fury-parent</artifactId>
+    <groupId>io.quarkiverse.fory</groupId>
+    <artifactId>quarkus-fory-parent</artifactId>
     <version>999-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Quarkus Fury - Parent</name>
+    <name>Quarkus Fory - Parent</name>
 
     <modules>
         <module>deployment</module>
@@ -19,15 +19,15 @@
     </modules>
 
     <scm>
-        <connection>scm:git:git@github.com:quarkiverse/quarkus-fury.git</connection>
-        <developerConnection>scm:git:git@github.com:quarkiverse/quarkus-fury.git</developerConnection>
-        <url>https://github.com/quarkiverse/quarkus-fury</url>
+        <connection>scm:git:git@github.com:quarkiverse/quarkus-fory.git</connection>
+        <developerConnection>scm:git:git@github.com:quarkiverse/quarkus-fory.git</developerConnection>
+        <url>https://github.com/quarkiverse/quarkus-fory</url>
       <tag>HEAD</tag>
   </scm>
 
     <properties>
         <quarkus.version>3.24.0</quarkus.version>
-        <fury.version>0.10.3</fury.version>
+        <fory.version>0.11.0</fory.version>
         <jandex-maven-plugin.version>1.2.3</jandex-maven-plugin.version>
     </properties>
 
@@ -41,9 +41,9 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.apache.fury</groupId>
-                <artifactId>fury-core</artifactId>
-                <version>${fury.version}</version>
+                <groupId>org.apache.fory</groupId>
+                <artifactId>fory-core</artifactId>
+                <version>${fory.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.quarkiverse.fury</groupId>
-        <artifactId>quarkus-fury-parent</artifactId>
+        <groupId>io.quarkiverse.fory</groupId>
+        <artifactId>quarkus-fory-parent</artifactId>
         <version>999-SNAPSHOT</version>
     </parent>
-    <artifactId>quarkus-fury</artifactId>
-    <name>Quarkus Fury - Runtime</name>
+    <artifactId>quarkus-fory</artifactId>
+    <name>Quarkus Fory - Runtime</name>
     <description>A blazingly fast multi-language serialization framework powered by JIT and zero-copy</description>
     <dependencies>
         <dependency>
@@ -21,8 +21,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.fury</groupId>
-            <artifactId>fury-core</artifactId>
+            <groupId>org.apache.fory</groupId>
+            <artifactId>fory-core</artifactId>
         </dependency>
         <dependency>
             <groupId>jakarta.ws.rs</groupId>

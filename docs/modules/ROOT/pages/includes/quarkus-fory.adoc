@@ -1,0 +1,270 @@
+[.configuration-legend]
+icon:lock[title=Fixed at build time] Configuration property fixed at build time - All other configuration properties are overridable at runtime
+[.configuration-reference.searchable, cols="80,.^10,.^10"]
+|===
+
+h|[.header-title]##Configuration property##
+h|Type
+h|Default
+
+a|icon:lock[title=Fixed at build time] [[quarkus-fory_quarkus-fory-language]] [.property-path]##link:#quarkus-fory_quarkus-fory-language[`quarkus.fory.language`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fory.language+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+The language of fory. The default is JAVA.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_FORY_LANGUAGE+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_FORY_LANGUAGE+++`
+endif::add-copy-button-to-env-var[]
+--
+a|`java`, `xlang`
+|`java`
+
+a|icon:lock[title=Fixed at build time] [[quarkus-fory_quarkus-fory-required-class-registration]] [.property-path]##link:#quarkus-fory_quarkus-fory-required-class-registration[`quarkus.fory.required-class-registration`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fory.required-class-registration+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+Require class registration for serialization. The default is true.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_FORY_REQUIRED_CLASS_REGISTRATION+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_FORY_REQUIRED_CLASS_REGISTRATION+++`
+endif::add-copy-button-to-env-var[]
+--
+|boolean
+|`true`
+
+a|icon:lock[title=Fixed at build time] [[quarkus-fory_quarkus-fory-track-ref]] [.property-path]##link:#quarkus-fory_quarkus-fory-track-ref[`quarkus.fory.track-ref`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fory.track-ref+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+Whether track shared or circular references.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_FORY_TRACK_REF+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_FORY_TRACK_REF+++`
+endif::add-copy-button-to-env-var[]
+--
+|boolean
+|`false`
+
+a|icon:lock[title=Fixed at build time] [[quarkus-fory_quarkus-fory-compatible-mode]] [.property-path]##link:#quarkus-fory_quarkus-fory-compatible-mode[`quarkus.fory.compatible-mode`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fory.compatible-mode+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+Set class schema compatible mode.  +
+SCHEMA_CONSISTENT: Class schema must be consistent between serialization peer and deserialization peer.  +
+COMPATIBLE: Class schema can be different between serialization peer and deserialization peer. They can add/delete fields independently.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_FORY_COMPATIBLE_MODE+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_FORY_COMPATIBLE_MODE+++`
+endif::add-copy-button-to-env-var[]
+--
+a|`schema-consistent`, `compatible`
+|`schema-consistent`
+
+a|icon:lock[title=Fixed at build time] [[quarkus-fory_quarkus-fory-compress-number]] [.property-path]##link:#quarkus-fory_quarkus-fory-compress-number[`quarkus.fory.compress-number`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fory.compress-number+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+Use variable length encoding for int/long.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_FORY_COMPRESS_NUMBER+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_FORY_COMPRESS_NUMBER+++`
+endif::add-copy-button-to-env-var[]
+--
+|boolean
+|`true`
+
+a|icon:lock[title=Fixed at build time] [[quarkus-fory_quarkus-fory-compress-string]] [.property-path]##link:#quarkus-fory_quarkus-fory-compress-string[`quarkus.fory.compress-string`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fory.compress-string+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+Whether compress string for small size.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_FORY_COMPRESS_STRING+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_FORY_COMPRESS_STRING+++`
+endif::add-copy-button-to-env-var[]
+--
+|boolean
+|`true`
+
+a|icon:lock[title=Fixed at build time] [[quarkus-fory_quarkus-fory-deserialize-nonexistent-class]] [.property-path]##link:#quarkus-fory_quarkus-fory-deserialize-nonexistent-class[`quarkus.fory.deserialize-nonexistent-class`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fory.deserialize-nonexistent-class+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+Whether deserialize/skip data of un-existed class. If not enabled, an exception will be thrown if class not exist.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_FORY_DESERIALIZE_NONEXISTENT_CLASS+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_FORY_DESERIALIZE_NONEXISTENT_CLASS+++`
+endif::add-copy-button-to-env-var[]
+--
+|boolean
+|`false`
+
+a|icon:lock[title=Fixed at build time] [[quarkus-fory_quarkus-fory-deserialize-nonexistent-enum-value-as-null]] [.property-path]##link:#quarkus-fory_quarkus-fory-deserialize-nonexistent-enum-value-as-null[`quarkus.fory.deserialize-nonexistent-enum-value-as-null`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fory.deserialize-nonexistent-enum-value-as-null+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+If an enum value doesn't exist, return a null instead of throws exception.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_FORY_DESERIALIZE_NONEXISTENT_ENUM_VALUE_AS_NULL+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_FORY_DESERIALIZE_NONEXISTENT_ENUM_VALUE_AS_NULL+++`
+endif::add-copy-button-to-env-var[]
+--
+|boolean
+|`false`
+
+a|icon:lock[title=Fixed at build time] [[quarkus-fory_quarkus-fory-thread-safe]] [.property-path]##link:#quarkus-fory_quarkus-fory-thread-safe[`quarkus.fory.thread-safe`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fory.thread-safe+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+Whether to use thread safe fory. The default is true.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_FORY_THREAD_SAFE+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_FORY_THREAD_SAFE+++`
+endif::add-copy-button-to-env-var[]
+--
+|boolean
+|`true`
+
+a|icon:lock[title=Fixed at build time] [[quarkus-fory_quarkus-fory-register-class-names]] [.property-path]##link:#quarkus-fory_quarkus-fory-register-class-names[`quarkus.fory.register-class-names`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fory.register-class-names+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+Names of classes to register which no need to be with class-id or customize serializer. It has to be separated by comma.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_FORY_REGISTER_CLASS_NAMES+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_FORY_REGISTER_CLASS_NAMES+++`
+endif::add-copy-button-to-env-var[]
+--
+|string
+|
+
+h|[[quarkus-fory_section_quarkus-fory-register-class]] [.section-name.section-level0]##link:#quarkus-fory_section_quarkus-fory-register-class[Configurations of register class]##
+h|Type
+h|Default
+
+a|icon:lock[title=Fixed at build time] [[quarkus-fory_quarkus-fory-register-class-register-class-name-class-id]] [.property-path]##link:#quarkus-fory_quarkus-fory-register-class-register-class-name-class-id[`quarkus.fory.register-class."register-class-name".class-id`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fory.register-class."register-class-name".class-id+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+Class id must be greater or equal to 256, and it must be different between classes. The default is -1.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_FORY_REGISTER_CLASS__REGISTER_CLASS_NAME__CLASS_ID+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_FORY_REGISTER_CLASS__REGISTER_CLASS_NAME__CLASS_ID+++`
+endif::add-copy-button-to-env-var[]
+--
+|int
+|`-1`
+
+a|icon:lock[title=Fixed at build time] [[quarkus-fory_quarkus-fory-register-class-register-class-name-serializer]] [.property-path]##link:#quarkus-fory_quarkus-fory-register-class-register-class-name-serializer[`quarkus.fory.register-class."register-class-name".serializer`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fory.register-class."register-class-name".serializer+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+Specify a customized serializer for current class. This should be empty to let Fory create serializer for current class. But if users want to customize serialization for this class, one can provide serializer here.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_FORY_REGISTER_CLASS__REGISTER_CLASS_NAME__SERIALIZER+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_FORY_REGISTER_CLASS__REGISTER_CLASS_NAME__SERIALIZER+++`
+endif::add-copy-button-to-env-var[]
+--
+|string
+|
+
+
+|===
+

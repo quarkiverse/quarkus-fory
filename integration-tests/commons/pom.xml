@@ -3,17 +3,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.quarkiverse.fury</groupId>
-        <artifactId>quarkus-fury-integration-tests</artifactId>
+        <groupId>io.quarkiverse.fory</groupId>
+        <artifactId>quarkus-fory-integration-tests</artifactId>
         <version>999-SNAPSHOT</version>
     </parent>
-    <artifactId>quarkus-fury-integration-tests-commons</artifactId>
-    <name>Quarkus Fury - Integration Tests - Commons</name>
+    <artifactId>quarkus-fory-integration-tests-commons</artifactId>
+    <name>Quarkus Fory - Integration Tests - Commons</name>
 
     <dependencies>
          <dependency>
-             <groupId>io.quarkiverse.fury</groupId>
-             <artifactId>quarkus-fury</artifactId>
+             <groupId>io.quarkiverse.fory</groupId>
+             <artifactId>quarkus-fory</artifactId>
              <version>${project.version}</version>
          </dependency>
          <dependency>
