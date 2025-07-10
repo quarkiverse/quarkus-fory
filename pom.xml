@@ -27,7 +27,7 @@
 
     <properties>
         <quarkus.version>3.24.0</quarkus.version>
-        <fory.version>0.11.1</fory.version>
+        <fory.version>0.11.2</fory.version>
         <jandex-maven-plugin.version>1.2.3</jandex-maven-plugin.version>
     </properties>
 
