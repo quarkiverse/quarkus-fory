@@ -73,6 +73,8 @@ class ForyProcessor {
             recorder.registerClassByName(fory.getFory(), config.getKey(), config.getValue().classId(),
                     config.getValue().serializer());
         }
+
+        recorder.ensureSerializersCompiled(fory.getFory());
     }
 
     @BuildStep

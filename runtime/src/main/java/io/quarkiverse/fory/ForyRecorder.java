@@ -106,6 +106,11 @@ public class ForyRecorder {
         // when registering classes, so explicit createSerializerAhead call is no longer needed
     }
 
+    public void ensureSerializersCompiled(final RuntimeValue<BaseFory> foryValue) {
+        BaseFory fory = foryValue.getValue();
+        fory.ensureSerializersCompiled();
+    }
+
     private ClassResolver getClassResolver(BaseFory fory) {
         if (fory instanceof ThreadSafeFory) {
             ThreadSafeFory threadSafeFory = (ThreadSafeFory) fory;
