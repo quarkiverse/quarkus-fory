@@ -1,7 +1,5 @@
 package io.quarkiverse.fory;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.function.Function;
@@ -103,17 +101,14 @@ public class ForyRecorder {
         }
         if (serializer != null) {
             fory.registerSerializer(clazz, serializer);
-        } else {
-            // Generate serializer bytecode.
-            try {
-                Method createSerializerAhead = ClassResolver.class.getDeclaredMethod(
-                        "createSerializerAhead", Class.class);
-                createSerializerAhead.setAccessible(true);
-                createSerializerAhead.invoke(classResolver, clazz);
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                throw new RuntimeException(e);
-            }
         }
+        // Note: In Apache Fory 0.13.0+, serializer generation is handled automatically
+        // when registering classes, so explicit createSerializerAhead call is no longer needed
+    }
+
+    public void ensureSerializersCompiled(final RuntimeValue<BaseFory> foryValue) {
+        BaseFory fory = foryValue.getValue();
+        fory.ensureSerializersCompiled();
     }
 
     private ClassResolver getClassResolver(BaseFory fory) {
