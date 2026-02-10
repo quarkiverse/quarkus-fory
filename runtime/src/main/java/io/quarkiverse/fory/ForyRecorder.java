@@ -37,8 +37,8 @@ public class ForyRecorder {
                 .withName("Fory-" + System.nanoTime())
                 .withRefTracking(config.trackRef())
                 .withCompatibleMode(config.compatibleMode())
-                .withDeserializeNonexistentClass(config.deserializeNonexistentClass())
-                .deserializeNonexistentEnumValueAsNull(config.deserializeNonexistentEnumValueAsNull())
+                .withDeserializeUnknownClass(config.deserializeNonexistentClass())
+                .deserializeUnknownEnumValueAsNull(config.deserializeNonexistentEnumValueAsNull())
                 .withNumberCompressed(config.compressNumber())
                 .withStringCompressed(config.compressString());
         Function<ClassLoader, Fory> foryFactory = c -> {
