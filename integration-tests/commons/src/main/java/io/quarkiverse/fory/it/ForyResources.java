@@ -34,9 +34,9 @@ public class ForyResources {
         Foo foo2 = (Foo) fory.deserialize(fory.serialize(foo1));
         Serializer serializer;
         if (fory instanceof ThreadSafeFory) {
-            serializer = ((ThreadSafeFory) fory).execute(f -> f.getClassResolver().getSerializer(Foo.class));
+            serializer = ((ThreadSafeFory) fory).execute(f -> f.getTypeResolver().getSerializer(Foo.class));
         } else {
-            serializer = ((Fory) fory).getClassResolver().getSerializer(Foo.class);
+            serializer = ((Fory) fory).getTypeResolver().getSerializer(Foo.class);
         }
         Preconditions.checkArgument(serializer instanceof FooSerializer, serializer);
 
@@ -50,9 +50,9 @@ public class ForyResources {
         Bar bar2 = (Bar) fory.deserialize(fory.serialize(bar));
         Serializer serializer;
         if (fory instanceof ThreadSafeFory) {
-            serializer = ((ThreadSafeFory) fory).execute(f -> f.getClassResolver().getSerializer(Bar.class));
+            serializer = ((ThreadSafeFory) fory).execute(f -> f.getTypeResolver().getSerializer(Bar.class));
         } else {
-            serializer = ((Fory) fory).getClassResolver().getSerializer(Bar.class);
+            serializer = ((Fory) fory).getTypeResolver().getSerializer(Bar.class);
         }
         Preconditions.checkArgument(serializer instanceof BarSerializer, serializer);
         return bar2.equals(bar);
@@ -65,9 +65,9 @@ public class ForyResources {
         ThirdPartyBar bar2 = (ThirdPartyBar) fory.deserialize(fory.serialize(bar));
         Serializer<?> serializer;
         if (fory instanceof ThreadSafeFory) {
-            serializer = ((ThreadSafeFory) fory).execute(f -> f.getClassResolver().getSerializer(ThirdPartyBar.class));
+            serializer = ((ThreadSafeFory) fory).execute(f -> f.getTypeResolver().getSerializer(ThirdPartyBar.class));
         } else {
-            serializer = ((Fory) fory).getClassResolver().getSerializer(ThirdPartyBar.class);
+            serializer = ((Fory) fory).getTypeResolver().getSerializer(ThirdPartyBar.class);
         }
         Preconditions.checkArgument(serializer instanceof ThridPartyBarSerializer, serializer);
         return bar2.equals(bar);

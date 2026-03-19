@@ -12,11 +12,11 @@ public class BarSerializer extends Serializer<Bar> {
     @Override
     public void write(MemoryBuffer buffer, Bar value) {
         buffer.writeVarInt32(value.f1());
-        fory.writeJavaString(buffer, value.f2());
+        fory.writeString(buffer, value.f2());
     }
 
     @Override
     public Bar read(MemoryBuffer buffer) {
-        return new Bar(buffer.readVarInt32(), fory.readJavaString(buffer));
+        return new Bar(buffer.readVarInt32(), fory.readString(buffer));
     }
 }

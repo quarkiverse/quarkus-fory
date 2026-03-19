@@ -12,11 +12,11 @@ public class ThridPartyBarSerializer extends Serializer<ThirdPartyBar> {
     @Override
     public void write(MemoryBuffer buffer, ThirdPartyBar value) {
         buffer.writeVarInt32(value.f1());
-        fory.writeJavaString(buffer, value.f2());
+        fory.writeString(buffer, value.f2());
     }
 
     @Override
     public ThirdPartyBar read(MemoryBuffer buffer) {
-        return new ThirdPartyBar(buffer.readVarInt32(), fory.readJavaString(buffer));
+        return new ThirdPartyBar(buffer.readVarInt32(), fory.readString(buffer));
     }
 }

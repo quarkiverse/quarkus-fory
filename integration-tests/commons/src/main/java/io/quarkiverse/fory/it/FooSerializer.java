@@ -17,16 +17,16 @@ public class FooSerializer extends Serializer<Foo> {
     @Override
     public void write(MemoryBuffer buffer, Foo value) {
         buffer.writeVarInt32(value.f1());
-        fory.writeJavaString(buffer, value.f2());
+        fory.writeString(buffer, value.f2());
 
         buffer.writeInt32(value.f3().size());
         for (String v : value.f3()) {
-            fory.writeJavaString(buffer, v);
+            fory.writeString(buffer, v);
         }
 
         buffer.writeInt32(value.f4().size());
         for (var entry : value.f4().entrySet()) {
-            fory.writeJavaString(buffer, entry.getKey());
+            fory.writeString(buffer, entry.getKey());
             buffer.writeInt64(entry.getValue());
         }
     }
@@ -34,18 +34,18 @@ public class FooSerializer extends Serializer<Foo> {
     @Override
     public Foo read(MemoryBuffer buffer) {
         int f1 = buffer.readVarInt32();
-        String f2 = fory.readJavaString(buffer);
+        String f2 = fory.readString(buffer);
         List<String> f3 = new ArrayList<>();
         Map<String, Long> f4 = new HashMap<>();
 
         int size = buffer.readInt32();
         for (int i = 0; i < size; i++) {
-            f3.add(fory.readJavaString(buffer));
+            f3.add(fory.readString(buffer));
         }
 
         size = buffer.readInt32();
         for (int i = 0; i < size; i++) {
-            f4.put(fory.readJavaString(buffer), buffer.readInt64());
+            f4.put(fory.readString(buffer), buffer.readInt64());
         }
 
         return new Foo(f1, f2, f3, f4);

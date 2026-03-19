@@ -19,7 +19,7 @@ import org.apache.fory.BaseFory;
 import org.apache.fory.Fory;
 import org.apache.fory.ThreadSafeFory;
 import org.apache.fory.io.ForyInputStream;
-import org.apache.fory.resolver.ClassResolver;
+import org.apache.fory.resolver.TypeResolver;
 import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.ConfigProvider;
 
@@ -72,10 +72,10 @@ public class ForySerializer implements MessageBodyReader<Object>, MessageBodyWri
             return true;
         }
         if (getFory() instanceof final ThreadSafeFory threadSafeFory) {
-            return (threadSafeFory).execute(f -> f.getClassResolver().getRegisteredClassId(aClass)) != null;
+            return (threadSafeFory).execute(f -> f.getTypeResolver().isRegistered(aClass));
         } else {
-            ClassResolver classResolver = ((Fory) getFory()).getClassResolver();
-            return classResolver.getRegisteredClassId(aClass) != null;
+            TypeResolver typeResolver = ((Fory) getFory()).getTypeResolver();
+            return typeResolver.isRegistered(aClass);
         }
     }
 
