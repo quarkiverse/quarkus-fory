@@ -10,8 +10,8 @@ import org.apache.fory.ThreadLocalFory;
 import org.apache.fory.ThreadSafeFory;
 import org.apache.fory.config.Config;
 import org.apache.fory.config.ForyBuilder;
-import org.apache.fory.resolver.ClassChecker;
-import org.apache.fory.resolver.ClassResolver;
+import org.apache.fory.resolver.TypeChecker;
+import org.apache.fory.resolver.TypeResolver;
 import org.apache.fory.serializer.Serializer;
 import org.apache.fory.util.GraalvmSupport;
 import org.apache.fory.util.Preconditions;
@@ -25,7 +25,7 @@ import io.quarkus.runtime.annotations.Recorder;
 public class ForyRecorder {
     private static final Logger LOG = Logger.getLogger(ForyRecorder.class);
     private static final ConcurrentSkipListSet<String> annotatedClasses = new ConcurrentSkipListSet<>();
-    private static final ClassChecker checker = (classResolver, className) -> !GraalvmSupport.isGraalRuntime()
+    private static final TypeChecker checker = (typeResolver, className) -> !GraalvmSupport.isGraalRuntime()
             || annotatedClasses.contains(className);
 
     public RuntimeValue<BaseFory> createFory(
@@ -43,7 +43,7 @@ public class ForyRecorder {
                 .withStringCompressed(config.compressString());
         Function<ClassLoader, Fory> foryFactory = c -> {
             Fory f = builder.withClassLoader(c).build();
-            f.getClassResolver().setClassChecker(checker);
+            f.getTypeResolver().setTypeChecker(checker);
             return f;
         };
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -78,21 +78,15 @@ public class ForyRecorder {
             final int classId, Class<? extends Serializer> serializer) {
         annotatedClasses.add(clazz.getName());
         BaseFory fory = foryValue.getValue();
-        ClassResolver classResolver = getClassResolver(fory);
-        Config config = classResolver.getFory().getConfig();
+        TypeResolver typeResolver = getTypeResolver(fory);
+        Config config = typeResolver.getFory().getConfig();
         if (classId > 0) {
             Preconditions.checkArgument(
                     classId >= 256 && classId <= Short.MAX_VALUE,
                     "Class id %s must be >= 256 and <= %s",
                     classId,
                     Short.MAX_VALUE);
-            Class<?> registeredClass = classResolver.getRegisteredClass((short) classId);
-            Preconditions.checkArgument(
-                    registeredClass == null,
-                    "ClassId %s has been registered for class %s",
-                    classId,
-                    registeredClass);
-            fory.register(clazz, (short) classId);
+            fory.register(clazz, classId);
         } else {
             // Generate serializer bytecode.
             if (config.requireClassRegistration()) {
@@ -111,12 +105,12 @@ public class ForyRecorder {
         fory.ensureSerializersCompiled();
     }
 
-    private ClassResolver getClassResolver(BaseFory fory) {
+    private TypeResolver getTypeResolver(BaseFory fory) {
         if (fory instanceof ThreadSafeFory) {
             ThreadSafeFory threadSafeFory = (ThreadSafeFory) fory;
-            return threadSafeFory.execute(Fory::getClassResolver);
+            return threadSafeFory.execute(Fory::getTypeResolver);
         } else {
-            return ((Fory) fory).getClassResolver();
+            return ((Fory) fory).getTypeResolver();
         }
     }
 }
