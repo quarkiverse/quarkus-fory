@@ -10,7 +10,6 @@ import org.apache.fory.config.Language;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import io.quarkus.test.junit.DisabledOnIntegrationTest;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
@@ -22,7 +21,6 @@ public class ForyTest {
     }
 
     @Test
-    @DisabledOnIntegrationTest("requireClassRegistration=false is not supported now")
     public void testPojo() {
         given().when().get("/fory/pojo").then().statusCode(200).body(is("true"));
     }
@@ -33,7 +31,6 @@ public class ForyTest {
     }
 
     @Test
-    @DisabledOnIntegrationTest("requireClassRegistration=false is not supported now")
     public void testForyStruct() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         Struct struct = Struct.create();
