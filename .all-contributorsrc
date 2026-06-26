@@ -35,6 +35,16 @@
       "contributions": [
         "maintenance"
       ]
+    },
+    {
+      "login": "jamesnetherton",
+      "name": "James Netherton",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4721408?v=4",
+      "profile": "https://jamesnetherton.github.io/",
+      "contributions": [
+        "maintenance",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
