@@ -5,47 +5,51 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.fory.Fory;
+import org.apache.fory.config.Config;
+import org.apache.fory.context.ReadContext;
+import org.apache.fory.context.WriteContext;
 import org.apache.fory.memory.MemoryBuffer;
 import org.apache.fory.serializer.Serializer;
 
 public class FooSerializer extends Serializer<Foo> {
-    public FooSerializer(Fory fory, Class<Foo> type) {
-        super(fory, type);
+    public FooSerializer(Config config, Class<Foo> type) {
+        super(config, type);
     }
 
     @Override
-    public void write(MemoryBuffer buffer, Foo value) {
+    public void write(WriteContext ctx, Foo value) {
+        MemoryBuffer buffer = ctx.getBuffer();
         buffer.writeVarInt32(value.f1());
-        fory.writeString(buffer, value.f2());
+        ctx.writeString(value.f2());
 
         buffer.writeInt32(value.f3().size());
         for (String v : value.f3()) {
-            fory.writeString(buffer, v);
+            ctx.writeString(v);
         }
 
         buffer.writeInt32(value.f4().size());
         for (var entry : value.f4().entrySet()) {
-            fory.writeString(buffer, entry.getKey());
+            ctx.writeString(entry.getKey());
             buffer.writeInt64(entry.getValue());
         }
     }
 
     @Override
-    public Foo read(MemoryBuffer buffer) {
+    public Foo read(ReadContext ctx) {
+        MemoryBuffer buffer = ctx.getBuffer();
         int f1 = buffer.readVarInt32();
-        String f2 = fory.readString(buffer);
+        String f2 = ctx.readString();
         List<String> f3 = new ArrayList<>();
         Map<String, Long> f4 = new HashMap<>();
 
         int size = buffer.readInt32();
         for (int i = 0; i < size; i++) {
-            f3.add(fory.readString(buffer));
+            f3.add(ctx.readString());
         }
 
         size = buffer.readInt32();
         for (int i = 0; i < size; i++) {
-            f4.put(fory.readString(buffer), buffer.readInt64());
+            f4.put(ctx.readString(), buffer.readInt64());
         }
 
         return new Foo(f1, f2, f3, f4);

@@ -1,22 +1,23 @@
 package io.quarkiverse.fory.it;
 
-import org.apache.fory.Fory;
-import org.apache.fory.memory.MemoryBuffer;
+import org.apache.fory.config.Config;
+import org.apache.fory.context.ReadContext;
+import org.apache.fory.context.WriteContext;
 import org.apache.fory.serializer.Serializer;
 
 public class BarSerializer extends Serializer<Bar> {
-    public BarSerializer(Fory fory, Class<Bar> type) {
-        super(fory, type);
+    public BarSerializer(Config config, Class<Bar> type) {
+        super(config, type);
     }
 
     @Override
-    public void write(MemoryBuffer buffer, Bar value) {
-        buffer.writeVarInt32(value.f1());
-        fory.writeString(buffer, value.f2());
+    public void write(WriteContext ctx, Bar value) {
+        ctx.getBuffer().writeVarInt32(value.f1());
+        ctx.writeString(value.f2());
     }
 
     @Override
-    public Bar read(MemoryBuffer buffer) {
-        return new Bar(buffer.readVarInt32(), fory.readString(buffer));
+    public Bar read(ReadContext ctx) {
+        return new Bar(ctx.getBuffer().readVarInt32(), ctx.readString());
     }
 }

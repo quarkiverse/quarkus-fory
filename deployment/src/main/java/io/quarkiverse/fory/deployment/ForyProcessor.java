@@ -2,12 +2,17 @@ package io.quarkiverse.fory.deployment;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BooleanSupplier;
 
 import jakarta.ws.rs.RuntimeType;
 
 import org.apache.fory.serializer.Serializer;
+import org.apache.fory.serializer.collection.GuavaCollectionSerializers;
 import org.jboss.jandex.AnnotationTarget;
 import org.jboss.jandex.DotName;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
 import io.quarkiverse.fory.ForyBuildTimeConfig;
 import io.quarkiverse.fory.ForyProducer;
@@ -17,14 +22,17 @@ import io.quarkiverse.fory.ForySerializer;
 import io.quarkiverse.fory.ReactiveForySerializer;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.arc.deployment.BeanContainerBuildItem;
+import io.quarkus.bootstrap.classloading.QuarkusClassLoader;
 import io.quarkus.deployment.Capabilities;
 import io.quarkus.deployment.Capability;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
+import io.quarkus.deployment.builditem.BytecodeTransformerBuildItem;
 import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
+import io.quarkus.deployment.pkg.steps.NativeOrNativeSourcesBuild;
 import io.quarkus.resteasy.common.spi.ResteasyJaxrsProviderBuildItem;
 import io.quarkus.resteasy.reactive.spi.MessageBodyReaderBuildItem;
 import io.quarkus.resteasy.reactive.spi.MessageBodyWriterBuildItem;
@@ -82,6 +90,83 @@ class ForyProcessor {
     public ForyBuildItem setup(
             ForyBuildTimeConfig config, BeanContainerBuildItem beanContainer, ForyRecorder recorder) {
         return new ForyBuildItem(recorder.createFory(config, beanContainer.getValue()));
+    }
+
+    @BuildStep(onlyIf = { NativeOrNativeSourcesBuild.class, GuavaIsAbsent.class })
+    void transformGuavaCollectionSerializers(BuildProducer<BytecodeTransformerBuildItem> transformers) {
+        // If guava is not on the runtime classpath then we need to remove references to it from GuavaCollectionSerializers
+        transformers.produce(new BytecodeTransformerBuildItem(
+                GuavaCollectionSerializers.class.getName(),
+                (className, classVisitor) -> new GuavaStubClassVisitor(classVisitor)));
+    }
+
+    static final class GuavaIsAbsent implements BooleanSupplier {
+        @Override
+        public boolean getAsBoolean() {
+            return !QuarkusClassLoader.isClassPresentAtRuntime("com.google.common.collect.ImmutableMap");
+        }
+    }
+
+    private static class GuavaStubClassVisitor extends ClassVisitor {
+        GuavaStubClassVisitor(ClassVisitor delegate) {
+            super(Opcodes.ASM9, delegate);
+        }
+
+        @Override
+        public MethodVisitor visitMethod(int access, String name, String descriptor, String signature,
+                String[] exceptions) {
+            MethodVisitor mv = super.visitMethod(access, name, descriptor, signature, exceptions);
+            switch (name) {
+                case "isGuavaAvailable":
+                    // return false
+                    mv.visitCode();
+                    mv.visitInsn(Opcodes.ICONST_0);
+                    mv.visitInsn(Opcodes.IRETURN);
+                    mv.visitMaxs(1, 0);
+                    mv.visitEnd();
+                    return null;
+                case "getNumReservedTypeIds":
+                    // return 13
+                    mv.visitCode();
+                    mv.visitIntInsn(Opcodes.BIPUSH, 13);
+                    mv.visitInsn(Opcodes.IRETURN);
+                    mv.visitMaxs(1, 0);
+                    mv.visitEnd();
+                    return null;
+                case "registerDefaultSerializers":
+                    // throw new IllegalStateException("Guava is not available")
+                    mv.visitCode();
+                    mv.visitTypeInsn(Opcodes.NEW, "java/lang/IllegalStateException");
+                    mv.visitInsn(Opcodes.DUP);
+                    mv.visitLdcInsn("Guava is not available");
+                    mv.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/lang/IllegalStateException",
+                            "<init>", "(Ljava/lang/String;)V", false);
+                    mv.visitInsn(Opcodes.ATHROW);
+                    mv.visitMaxs(3, 1);
+                    mv.visitEnd();
+                    return null;
+                case "getSerializerClass":
+                    if (descriptor.equals("(Ljava/lang/Class;)Ljava/lang/Class;")) {
+                        // return null
+                        mv.visitCode();
+                        mv.visitInsn(Opcodes.ACONST_NULL);
+                        mv.visitInsn(Opcodes.ARETURN);
+                        mv.visitMaxs(1, 1);
+                        mv.visitEnd();
+                        return null;
+                    }
+                    return mv;
+                case "<clinit>":
+                    // replace static initializer to avoid loading Guava classes
+                    mv.visitCode();
+                    mv.visitInsn(Opcodes.RETURN);
+                    mv.visitMaxs(0, 0);
+                    mv.visitEnd();
+                    return null;
+                default:
+                    return mv;
+            }
+        }
     }
 
     @BuildStep

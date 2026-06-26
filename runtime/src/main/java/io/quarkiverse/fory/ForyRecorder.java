@@ -10,10 +10,10 @@ import org.apache.fory.ThreadLocalFory;
 import org.apache.fory.ThreadSafeFory;
 import org.apache.fory.config.Config;
 import org.apache.fory.config.ForyBuilder;
+import org.apache.fory.platform.GraalvmSupport;
 import org.apache.fory.resolver.TypeChecker;
 import org.apache.fory.resolver.TypeResolver;
 import org.apache.fory.serializer.Serializer;
-import org.apache.fory.util.GraalvmSupport;
 import org.apache.fory.util.Preconditions;
 import org.jboss.logging.Logger;
 
@@ -31,23 +31,27 @@ public class ForyRecorder {
     public RuntimeValue<BaseFory> createFory(
             final ForyBuildTimeConfig config, final BeanContainer beanContainer) {
         // create the Fory instance from the config
-        ForyBuilder builder = Fory.builder();
-        builder.requireClassRegistration(config.requiredClassRegistration())
-                .withLanguage(config.language().format)
-                .withName("Fory-" + System.nanoTime())
-                .withRefTracking(config.trackRef())
-                .withCompatibleMode(config.compatibleMode())
-                .withDeserializeUnknownClass(config.deserializeNonexistentClass())
-                .deserializeUnknownEnumValueAsNull(config.deserializeNonexistentEnumValueAsNull())
-                .withNumberCompressed(config.compressNumber())
-                .withStringCompressed(config.compressString());
-        Function<ClassLoader, Fory> foryFactory = c -> {
-            Fory f = builder.withClassLoader(c).build();
+        Function<ForyBuilder, Fory> foryFactory = builder -> {
+            builder.requireClassRegistration(config.requiredClassRegistration())
+                    .withLanguage(config.language().format)
+                    .withName("Fory-" + System.nanoTime())
+                    .withRefTracking(config.trackRef())
+                    .withCompatibleMode(config.compatibleMode())
+                    .withDeserializeUnknownClass(config.deserializeNonexistentClass())
+                    .deserializeUnknownEnumValueAsNull(config.deserializeNonexistentEnumValueAsNull())
+                    .withNumberCompressed(config.compressNumber())
+                    .withStringCompressed(config.compressString());
+            Fory f = builder.build();
             f.getTypeResolver().setTypeChecker(checker);
             return f;
         };
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        BaseFory fory = config.threadSafe() ? new ThreadLocalFory(foryFactory) : foryFactory.apply(classLoader);
+        BaseFory fory;
+        if (config.threadSafe()) {
+            fory = new ThreadLocalFory(foryFactory);
+        } else {
+            ForyBuilder builder = Fory.builder();
+            fory = foryFactory.apply(builder);
+        }
         // register to the container
         beanContainer.beanInstance(ForyProducer.class).setFory(fory);
         return new RuntimeValue<>(fory);
@@ -79,7 +83,7 @@ public class ForyRecorder {
         annotatedClasses.add(clazz.getName());
         BaseFory fory = foryValue.getValue();
         TypeResolver typeResolver = getTypeResolver(fory);
-        Config config = typeResolver.getFory().getConfig();
+        Config config = typeResolver.getConfig();
         if (classId > 0) {
             Preconditions.checkArgument(
                     classId >= 256 && classId <= Short.MAX_VALUE,
@@ -90,7 +94,7 @@ public class ForyRecorder {
         } else {
             // Generate serializer bytecode.
             if (config.requireClassRegistration()) {
-                fory.register(clazz, serializer == null);
+                fory.register(clazz);
             }
         }
         if (serializer != null) {

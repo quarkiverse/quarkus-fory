@@ -6,6 +6,7 @@ import jakarta.ws.rs.ext.Provider;
 
 import org.apache.fory.BaseFory;
 import org.apache.fory.Fory;
+import org.apache.fory.config.Language;
 
 @Provider
 @Consumes({ "application/fory", "application/*+fory" })
@@ -15,7 +16,10 @@ public class ClientForySerializer extends ForySerializer {
 
     public ClientForySerializer() {
         if (fory == null) {
-            fory = Fory.builder().requireClassRegistration(true).withName("Fory" + System.nanoTime()).build();
+            fory = Fory.builder()
+                    .requireClassRegistration(true)
+                    .withLanguage(Language.JAVA)
+                    .withName("Fory" + System.nanoTime()).build();
         }
     }
 

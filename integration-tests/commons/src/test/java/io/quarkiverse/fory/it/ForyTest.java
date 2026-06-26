@@ -5,6 +5,8 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
 import org.apache.fory.Fory;
+import org.apache.fory.config.CompatibleMode;
+import org.apache.fory.config.Language;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +37,12 @@ public class ForyTest {
     public void testForyStruct() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         Struct struct = Struct.create();
-        Fory fory = Fory.builder().requireClassRegistration(false).withName("Fory" + System.nanoTime()).build();
+        Fory fory = Fory.builder()
+                .requireClassRegistration(false)
+                .withLanguage(Language.JAVA)
+                .withCompatibleMode(CompatibleMode.SCHEMA_CONSISTENT)
+                .withName("Fory" + System.nanoTime())
+                .build();
         Response response = given().contentType("application/fory").body(fory.serialize(struct)).when()
                 .post("/fory/struct").then().statusCode(200).contentType("application/fory").extract().response();
         byte[] result = response.body().asByteArray();
@@ -48,7 +55,11 @@ public class ForyTest {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 
         Bar bar = new Bar(1, "hello bar");
-        Fory fory = Fory.builder().requireClassRegistration(true).withName("Fory" + System.nanoTime()).build();
+        Fory fory = Fory.builder()
+                .requireClassRegistration(true)
+                .withLanguage(Language.JAVA)
+                .withName("Fory" + System.nanoTime())
+                .build();
         fory.register(Bar.class, BAR_CLASS_ID);
         fory.registerSerializer(Bar.class, BarSerializer.class);
 
