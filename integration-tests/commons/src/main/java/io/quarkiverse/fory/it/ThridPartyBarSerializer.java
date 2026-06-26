@@ -1,22 +1,23 @@
 package io.quarkiverse.fory.it;
 
-import org.apache.fory.Fory;
-import org.apache.fory.memory.MemoryBuffer;
+import org.apache.fory.config.Config;
+import org.apache.fory.context.ReadContext;
+import org.apache.fory.context.WriteContext;
 import org.apache.fory.serializer.Serializer;
 
 public class ThridPartyBarSerializer extends Serializer<ThirdPartyBar> {
-    public ThridPartyBarSerializer(Fory fory, Class<ThirdPartyBar> type) {
-        super(fory, type);
+    public ThridPartyBarSerializer(Config config, Class<ThirdPartyBar> type) {
+        super(config, type);
     }
 
     @Override
-    public void write(MemoryBuffer buffer, ThirdPartyBar value) {
-        buffer.writeVarInt32(value.f1());
-        fory.writeString(buffer, value.f2());
+    public void write(WriteContext ctx, ThirdPartyBar value) {
+        ctx.getBuffer().writeVarInt32(value.f1());
+        ctx.writeString(value.f2());
     }
 
     @Override
-    public ThirdPartyBar read(MemoryBuffer buffer) {
-        return new ThirdPartyBar(buffer.readVarInt32(), fory.readString(buffer));
+    public ThirdPartyBar read(ReadContext ctx) {
+        return new ThirdPartyBar(ctx.getBuffer().readVarInt32(), ctx.readString());
     }
 }
