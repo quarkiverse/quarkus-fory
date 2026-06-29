@@ -32,10 +32,12 @@ import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.BytecodeTransformerBuildItem;
 import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
+import io.quarkus.deployment.builditem.ModuleOpenBuildItem;
 import io.quarkus.deployment.pkg.steps.NativeOrNativeSourcesBuild;
 import io.quarkus.resteasy.common.spi.ResteasyJaxrsProviderBuildItem;
 import io.quarkus.resteasy.reactive.spi.MessageBodyReaderBuildItem;
 import io.quarkus.resteasy.reactive.spi.MessageBodyWriterBuildItem;
+import io.quarkus.runtime.util.JavaVersionGreaterOrEqual25;
 
 class ForyProcessor {
 
@@ -45,6 +47,11 @@ class ForyProcessor {
     @BuildStep
     FeatureBuildItem feature() {
         return new FeatureBuildItem(FEATURE);
+    }
+
+    @BuildStep(onlyIf = JavaVersionGreaterOrEqual25.class)
+    ModuleOpenBuildItem openJavaLangInvoke() {
+        return new ModuleOpenBuildItem("java.base", "org.apache.fory.core", "java.lang.invoke");
     }
 
     @BuildStep
