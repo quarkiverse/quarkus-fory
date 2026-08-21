@@ -1,6 +1,6 @@
 # Quarkus Fory
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Version](https://img.shields.io/maven-central/v/io.quarkiverse.fory/quarkus-fory?logo=apache-maven&style=flat-square)](https://central.sonatype.com/artifact/io.quarkiverse.fory/quarkus-fory-parent)
@@ -160,6 +160,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://zhfeng.github.io/"><img src="https://avatars.githubusercontent.com/u/1246139?v=4?s=100" width="100px;" alt="Zheng Feng"/><br /><sub><b>Zheng Feng</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-fory/commits?author=zhfeng" title="Code">💻</a> <a href="#maintenance-zhfeng" title="Maintenance">🚧</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/JiriOndrusek"><img src="https://avatars.githubusercontent.com/u/26897889?v=4?s=100" width="100px;" alt="JiriOndrusek"/><br /><sub><b>JiriOndrusek</b></sub></a><br /><a href="#maintenance-JiriOndrusek" title="Maintenance">🚧</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://jamesnetherton.github.io/"><img src="https://avatars.githubusercontent.com/u/4721408?v=4?s=100" width="100px;" alt="James Netherton"/><br /><sub><b>James Netherton</b></sub></a><br /><a href="#maintenance-jamesnetherton" title="Maintenance">🚧</a> <a href="https://github.com/quarkiverse/quarkus-fory/commits?author=jamesnetherton" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/guizmaii"><img src="https://avatars.githubusercontent.com/u/1193670?v=4?s=100" width="100px;" alt="Jules Ivanic"/><br /><sub><b>Jules Ivanic</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-fory/commits?author=guizmaii" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
