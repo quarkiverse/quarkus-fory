@@ -45,6 +45,11 @@
                 <artifactId>fory-core</artifactId>
                 <version>${fory.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.fory</groupId>
+                <artifactId>fory-json</artifactId>
+                <version>${fory.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
