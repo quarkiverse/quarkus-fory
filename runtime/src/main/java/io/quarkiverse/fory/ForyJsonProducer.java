@@ -1,5 +1,6 @@
 package io.quarkiverse.fory;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Singleton;
 
@@ -8,8 +9,8 @@ import org.apache.fory.json.ForyJson;
 /**
  * CDI producer for the {@link ForyJson} instance.
  * <p>
- * The instance is thread-safe and reusable. It is created once at startup
- * and shared across all requests.
+ * The instance is thread-safe, immutable, and created eagerly at startup.
+ * It is shared across all requests via singleton scope.
  */
 @Singleton
 public class ForyJsonProducer {
@@ -20,13 +21,16 @@ public class ForyJsonProducer {
         this.foryJson = foryJson;
     }
 
+    @PostConstruct
+    void init() {
+        if (this.foryJson == null) {
+            this.foryJson = ForyJson.builder().build();
+        }
+    }
+
     @Singleton
     @Produces
     ForyJson foryJson() {
-        if (this.foryJson == null) {
-            // Fallback: create a default instance if recorder didn't set one
-            this.foryJson = ForyJson.builder().build();
-        }
         return this.foryJson;
     }
 }

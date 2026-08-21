@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.Produces;
@@ -63,7 +64,7 @@ public class ForyJsonSerializer implements MessageBodyReader<Object>, MessageBod
             MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
             OutputStream entityStream) throws IOException, WebApplicationException {
         if (obj == null) {
-            entityStream.write("null".getBytes());
+            entityStream.write("null".getBytes(StandardCharsets.UTF_8));
             return;
         }
         byte[] bytes = getForyJson().toJsonBytes(obj);
