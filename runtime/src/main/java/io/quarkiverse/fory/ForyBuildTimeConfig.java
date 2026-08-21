@@ -74,4 +74,20 @@ public interface ForyBuildTimeConfig {
     @ConfigDocMapKey("register-class-name")
     Map<String, ForyRegisterClassConfig> registerClass();
 
+    /**
+     * JSON support configuration.
+     */
+    JsonConfig json();
+
+    interface JsonConfig {
+        /**
+         * Whether Fory JSON support is enabled.
+         * When enabled, the extension registers a JSON MessageBodyReader/Writer
+         * backed by Fory JSON for {@code application/json} media type.
+         * Set to {@code false} to disable and use another JSON extension (e.g. Jackson, JSON-B).
+         */
+        @WithDefault("true")
+        boolean enabled();
+    }
+
 }

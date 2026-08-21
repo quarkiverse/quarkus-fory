@@ -157,6 +157,13 @@ public class ExampleResource {
 
 This replaces Jackson/JSON-B with Fory JSON for annotated types — no additional configuration is needed. Clients receive standard JSON output consumable by browsers, CLI tools, and any JSON-compliant client.
 
+To disable Fory JSON support (e.g. to use Jackson or JSON-B instead), set:
+
+[source,properties]
+----
+quarkus.fory.json.enabled=false
+----
+
 [[extension-configuration-reference]]
 == Extension Configuration Reference
 
