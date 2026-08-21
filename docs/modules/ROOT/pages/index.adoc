@@ -132,9 +132,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-import io.quarkiverse.fory.ForySerialization;
-
-@ForySerialization
 record Foo(int f1, String f2) {
 }
 
@@ -155,7 +152,9 @@ public class ExampleResource {
 }
 ----
 
-Clients receive standard JSON output consumable by browsers, CLI tools, and any JSON-compliant client.
+Unlike the binary format, Fory JSON needs no class registration: `@ForySerialization` is not required, and any
+supported Java type can be serialized. Clients receive standard JSON output consumable by browsers, CLI tools,
+and any JSON-compliant client.
 
 Fory JSON support is disabled by default, because it takes over the `application/json` media type and would
 conflict with other JSON extensions such as Jackson or JSON-B. It also requires the `fory-json` artifact, which

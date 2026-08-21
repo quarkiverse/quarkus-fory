@@ -43,4 +43,23 @@ public class JsonRestForyTest {
                 .contentType(ContentType.JSON)
                 .body("f1", is(java.util.List.of(2, 3)), "f2", is(java.util.List.of("echo: a", "echo: b")));
     }
+
+    @Test
+    public void testUnannotatedTypeRoundTrips() {
+        given().when().get("/fory/json/plain")
+                .then().statusCode(200).contentType(ContentType.JSON)
+                .body("n", is(7), "s", is("no annotation"));
+
+        given().contentType(ContentType.JSON).body("{\"n\":1,\"s\":\"x\"}")
+                .when().post("/fory/json/plain")
+                .then().statusCode(200).contentType(ContentType.JSON)
+                .body("n", is(2), "s", is("echo: x"));
+    }
+
+    @Test
+    public void testRestClientRoundTrip() {
+        given().when().get("/fory/json/client")
+                .then().statusCode(200).contentType(ContentType.JSON)
+                .body("f1", is(2), "f2", is("echo: hello bar"));
+    }
 }
