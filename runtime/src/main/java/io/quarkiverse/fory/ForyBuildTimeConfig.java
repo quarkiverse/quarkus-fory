@@ -81,12 +81,12 @@ public interface ForyBuildTimeConfig {
 
     interface JsonConfig {
         /**
-         * Whether Fory JSON support is enabled.
+         * Whether Fory JSON support is enabled. Disabled by default.
          * When enabled, the extension registers a JSON MessageBodyReader/Writer
-         * backed by Fory JSON for {@code application/json} media type.
-         * Set to {@code false} to disable and use another JSON extension (e.g. Jackson, JSON-B).
+         * backed by Fory JSON for the {@code application/json} media type, which conflicts with
+         * other JSON extensions such as Jackson or JSON-B.
          */
-        @WithDefault("true")
+        @WithDefault("false")
         boolean enabled();
     }
 

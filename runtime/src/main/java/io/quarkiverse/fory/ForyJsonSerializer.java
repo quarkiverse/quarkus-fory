@@ -14,7 +14,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.ext.MessageBodyReader;
 import jakarta.ws.rs.ext.MessageBodyWriter;
-import jakarta.ws.rs.ext.Provider;
 
 import org.apache.fory.json.ForyJson;
 
@@ -27,8 +26,11 @@ import io.quarkus.arc.ArcContainer;
  * Provides the same high-performance serialization as the binary Fory serializer
  * but produces standard JSON output consumable by browsers, CLI tools, and any
  * JSON-compliant client.
+ * <p>
+ * Deliberately not annotated with {@code @Provider}: it must only be registered when
+ * {@code quarkus.fory.json.enabled=true}, so registration is done explicitly by the deployment
+ * module rather than through provider auto-discovery.
  */
-@Provider
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class ForyJsonSerializer implements MessageBodyReader<Object>, MessageBodyWriter<Object> {

@@ -266,5 +266,26 @@ endif::add-copy-button-to-env-var[]
 |
 
 
+a|icon:lock[title=Fixed at build time] [[quarkus-fory_quarkus-fory-json-enabled]] [.property-path]##link:#quarkus-fory_quarkus-fory-json-enabled[`+++quarkus.fory.json.enabled+++`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.fory.json.enabled+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+Whether Fory JSON support is enabled. Disabled by default. When enabled, the extension registers a JSON MessageBodyReader/Writer backed by Fory JSON for the `application/json` media type, which conflicts with other JSON extensions such as Jackson or JSON-B.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_FORY_JSON_ENABLED+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_FORY_JSON_ENABLED+++`
+endif::add-copy-button-to-env-var[]
+--
+|boolean
+|`+++false+++`
+
 |===
 
