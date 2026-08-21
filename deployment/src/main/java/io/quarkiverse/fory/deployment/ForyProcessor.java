@@ -15,6 +15,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 import io.quarkiverse.fory.ForyBuildTimeConfig;
+import io.quarkiverse.fory.ForyJsonSerializer;
 import io.quarkiverse.fory.ForyProducer;
 import io.quarkiverse.fory.ForyRecorder;
 import io.quarkiverse.fory.ForySerialization;
@@ -33,10 +34,12 @@ import io.quarkus.deployment.builditem.BytecodeTransformerBuildItem;
 import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.ModuleOpenBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.RuntimeInitializedClassBuildItem;
 import io.quarkus.deployment.pkg.steps.NativeOrNativeSourcesBuild;
 import io.quarkus.resteasy.common.spi.ResteasyJaxrsProviderBuildItem;
 import io.quarkus.resteasy.reactive.spi.MessageBodyReaderBuildItem;
 import io.quarkus.resteasy.reactive.spi.MessageBodyWriterBuildItem;
+import io.quarkus.runtime.configuration.ConfigurationException;
 import io.quarkus.runtime.util.JavaVersionGreaterOrEqual25;
 
 class ForyProcessor {
@@ -97,6 +100,22 @@ class ForyProcessor {
     public ForyBuildItem setup(
             ForyBuildTimeConfig config, BeanContainerBuildItem beanContainer, ForyRecorder recorder) {
         return new ForyBuildItem(recorder.createFory(config, beanContainer.getValue()));
+    }
+
+    /**
+     * fory-json's own native-image.properties initializes the whole
+     * {@code org.apache.fory.json.codec} package at build time, but
+     * {@code GuavaCodecs$Direct.<clinit>} references Guava unconditionally, so image generation
+     * fails with NoClassDefFoundError when Guava is not on the classpath. Defer that one class to
+     * runtime; it is only reached for Guava types, which cannot occur without Guava.
+     */
+    @BuildStep(onlyIf = { NativeOrNativeSourcesBuild.class, GuavaIsAbsent.class })
+    void runtimeInitJsonGuavaCodecs(ForyBuildTimeConfig config,
+            BuildProducer<RuntimeInitializedClassBuildItem> runtimeInitialized) {
+        if (config.json().enabled()) {
+            runtimeInitialized.produce(
+                    new RuntimeInitializedClassBuildItem("org.apache.fory.json.codec.GuavaCodecs$Direct"));
+        }
     }
 
     @BuildStep(onlyIf = { NativeOrNativeSourcesBuild.class, GuavaIsAbsent.class })
@@ -178,17 +197,33 @@ class ForyProcessor {
 
     @BuildStep
     public void registerResteasyIntegration(Capabilities capabilities,
+            ForyBuildTimeConfig config,
             BuildProducer<ResteasyJaxrsProviderBuildItem> resteasyJaxrsProviderBuildItemBuildProducer,
             BuildProducer<MessageBodyReaderBuildItem> additionalReaders,
             BuildProducer<MessageBodyWriterBuildItem> additionalWriters) {
+        if (config.json().enabled() && !QuarkusClassLoader.isClassPresentAtRuntime("org.apache.fory.json.ForyJson")) {
+            throw new ConfigurationException("quarkus.fory.json.enabled=true requires org.apache.fory:fory-json on "
+                    + "the classpath. Add it as a dependency, using the same version as fory-core, or set "
+                    + "quarkus.fory.json.enabled=false.");
+        }
         if (capabilities.isPresent(Capability.RESTEASY)) {
             resteasyJaxrsProviderBuildItemBuildProducer
                     .produce(new ResteasyJaxrsProviderBuildItem(ForySerializer.class.getName()));
+            if (config.json().enabled()) {
+                resteasyJaxrsProviderBuildItemBuildProducer
+                        .produce(new ResteasyJaxrsProviderBuildItem(ForyJsonSerializer.class.getName()));
+            }
         } else if (capabilities.isPresent(Capability.RESTEASY_REACTIVE)) {
             registerHandler(RuntimeType.SERVER, additionalReaders, additionalWriters);
+            if (config.json().enabled()) {
+                registerJsonHandler(RuntimeType.SERVER, additionalReaders, additionalWriters);
+            }
         }
         if (capabilities.isPresent(Capability.REST_CLIENT_REACTIVE)) {
             registerHandler(RuntimeType.CLIENT, additionalReaders, additionalWriters);
+            if (config.json().enabled()) {
+                registerJsonHandler(RuntimeType.CLIENT, additionalReaders, additionalWriters);
+            }
         }
     }
 
@@ -203,6 +238,21 @@ class ForyProcessor {
         additionalWriters.produce(new MessageBodyWriterBuildItem.Builder(
                 ReactiveForySerializer.class.getName(), Object.class.getName())
                 .setMediaTypeStrings(List.of("application/fory", "application/*+fory"))
+                .setRuntimeType(type)
+                .setBuiltin(true).build());
+    }
+
+    private void registerJsonHandler(RuntimeType type,
+            BuildProducer<MessageBodyReaderBuildItem> additionalReaders,
+            BuildProducer<MessageBodyWriterBuildItem> additionalWriters) {
+        additionalReaders.produce(new MessageBodyReaderBuildItem.Builder(
+                ForyJsonSerializer.class.getName(), Object.class.getName())
+                .setMediaTypeStrings(List.of("application/json"))
+                .setRuntimeType(type)
+                .setBuiltin(true).build());
+        additionalWriters.produce(new MessageBodyWriterBuildItem.Builder(
+                ForyJsonSerializer.class.getName(), Object.class.getName())
+                .setMediaTypeStrings(List.of("application/json"))
                 .setRuntimeType(type)
                 .setBuiltin(true).build());
     }

@@ -7,17 +7,17 @@
         <artifactId>quarkus-fory-integration-tests</artifactId>
         <version>999-SNAPSHOT</version>
     </parent>
-    <artifactId>quarkus-fory-integration-tests-classic-rest</artifactId>
-    <name>Quarkus Fory - Integration Tests - Classic Rest</name>
+    <artifactId>quarkus-fory-integration-tests-json-rest</artifactId>
+    <name>Quarkus Fory - Integration Tests - JSON Rest</name>
 
     <dependencies>
          <dependency>
              <groupId>io.quarkus</groupId>
-             <artifactId>quarkus-resteasy</artifactId>
+             <artifactId>quarkus-rest</artifactId>
          </dependency>
          <dependency>
              <groupId>io.quarkus</groupId>
-             <artifactId>quarkus-resteasy-client</artifactId>
+             <artifactId>quarkus-rest-client</artifactId>
          </dependency>
          <dependency>
              <groupId>io.quarkiverse.fory</groupId>

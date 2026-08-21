@@ -119,6 +119,72 @@ public class ExampleResource {
 NOTE: If class registration is enabled, the class ID (or serialization identifier) must be identical on both the client and server sides. A mismatch in the class ID will result in serialization or deserialization issues, potentially causing runtime errors or data corruption.
 If class registration is disabled, please do not assign class id at client and server slides.
 
+== JSON Serialization
+
+The extension also supports `application/json` media type via Fory JSON — a high-performance JSON serializer built on the same Fory engine. Use standard `@Produces` and `@Consumes` annotations with `APPLICATION_JSON`:
+
+[source,java,subs=attributes+]
+----
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+
+record Foo(int f1, String f2) {
+}
+
+@Path("/example")
+public class ExampleResource {
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Foo get() {
+        return new Foo(1, "test");
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Foo post(Foo obj) {
+        return new Foo(obj.f1() + 1, obj.f2());
+    }
+}
+----
+
+Unlike the binary format, Fory JSON needs no class registration: `@ForySerialization` is not required, and any
+supported Java type can be serialized. Clients receive standard JSON output consumable by browsers, CLI tools,
+and any JSON-compliant client.
+
+NOTE: In native mode, types that are not registered through `@ForySerialization` fall back to runtime codec
+generation, which GraalVM forbids, and requests for them fail with
+`UnsupportedFeatureError: Classes cannot be defined at runtime`. Annotate the types you serialize as JSON when
+you target native image.
+
+Fory JSON support is disabled by default, because it takes over the `application/json` media type and would
+conflict with other JSON extensions such as Jackson or JSON-B. It also requires the `fory-json` artifact, which
+is an optional dependency of the extension so that applications not using JSON don't ship it.
+
+To enable it, add the dependency — using the same version as the `fory-core` brought in by the extension:
+
+[source,xml,subs=attributes+]
+----
+<dependency>
+    <groupId>org.apache.fory</groupId>
+    <artifactId>fory-json</artifactId>
+    <version>${fory.version}</version>
+</dependency>
+----
+
+and turn it on:
+
+[source,properties]
+----
+quarkus.fory.json.enabled=true
+----
+
+If the property is enabled without `fory-json` on the classpath, the build fails with an explicit message.
+
 [[extension-configuration-reference]]
 == Extension Configuration Reference
 
