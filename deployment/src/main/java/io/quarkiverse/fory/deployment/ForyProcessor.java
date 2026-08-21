@@ -51,6 +51,26 @@ class ForyProcessor {
         return new FeatureBuildItem(FEATURE);
     }
 
+    /**
+     * Declare that this extension provides JSON serialization, suppressing Quarkus
+     * warnings about "no JSON extension has been added".
+     */
+    @BuildStep
+    void provideJsonCapability(ForyBuildTimeConfig config,
+            Capabilities capabilities,
+            BuildProducer<io.quarkus.deployment.builditem.CapabilityBuildItem> capabilityProducer) {
+        if (config.json().enabled()) {
+            if (capabilities.isPresent(Capability.RESTEASY)) {
+                capabilityProducer.produce(new io.quarkus.deployment.builditem.CapabilityBuildItem(
+                        "io.quarkus.resteasy.json.fory", FEATURE));
+            }
+            if (capabilities.isPresent(Capability.RESTEASY_REACTIVE)) {
+                capabilityProducer.produce(new io.quarkus.deployment.builditem.CapabilityBuildItem(
+                        "io.quarkus.rest.json.fory", FEATURE));
+            }
+        }
+    }
+
     @BuildStep(onlyIf = JavaVersionGreaterOrEqual25.class)
     ModuleOpenBuildItem openJavaLangInvoke() {
         return new ModuleOpenBuildItem("java.base", "org.apache.fory.core", "java.lang.invoke");
