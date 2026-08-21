@@ -34,6 +34,7 @@ import io.quarkus.deployment.builditem.BytecodeTransformerBuildItem;
 import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.ModuleOpenBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.RuntimeInitializedClassBuildItem;
 import io.quarkus.deployment.pkg.steps.NativeOrNativeSourcesBuild;
 import io.quarkus.resteasy.common.spi.ResteasyJaxrsProviderBuildItem;
 import io.quarkus.resteasy.reactive.spi.MessageBodyReaderBuildItem;
@@ -99,6 +100,22 @@ class ForyProcessor {
     public ForyBuildItem setup(
             ForyBuildTimeConfig config, BeanContainerBuildItem beanContainer, ForyRecorder recorder) {
         return new ForyBuildItem(recorder.createFory(config, beanContainer.getValue()));
+    }
+
+    /**
+     * fory-json's own native-image.properties initializes the whole
+     * {@code org.apache.fory.json.codec} package at build time, but
+     * {@code GuavaCodecs$Direct.<clinit>} references Guava unconditionally, so image generation
+     * fails with NoClassDefFoundError when Guava is not on the classpath. Defer that one class to
+     * runtime; it is only reached for Guava types, which cannot occur without Guava.
+     */
+    @BuildStep(onlyIf = { NativeOrNativeSourcesBuild.class, GuavaIsAbsent.class })
+    void runtimeInitJsonGuavaCodecs(ForyBuildTimeConfig config,
+            BuildProducer<RuntimeInitializedClassBuildItem> runtimeInitialized) {
+        if (config.json().enabled()) {
+            runtimeInitialized.produce(
+                    new RuntimeInitializedClassBuildItem("org.apache.fory.json.codec.GuavaCodecs$Direct"));
+        }
     }
 
     @BuildStep(onlyIf = { NativeOrNativeSourcesBuild.class, GuavaIsAbsent.class })
