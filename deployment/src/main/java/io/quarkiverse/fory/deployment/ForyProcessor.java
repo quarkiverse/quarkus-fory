@@ -15,6 +15,8 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 import io.quarkiverse.fory.ForyBuildTimeConfig;
+import io.quarkiverse.fory.ForyJsonProducer;
+import io.quarkiverse.fory.ForyJsonSerializer;
 import io.quarkiverse.fory.ForyProducer;
 import io.quarkiverse.fory.ForyRecorder;
 import io.quarkiverse.fory.ForySerialization;
@@ -65,6 +67,7 @@ class ForyProcessor {
     @BuildStep
     void unremovableBeans(BuildProducer<AdditionalBeanBuildItem> beanProducer) {
         beanProducer.produce(AdditionalBeanBuildItem.unremovableOf(ForyProducer.class));
+        beanProducer.produce(AdditionalBeanBuildItem.unremovableOf(ForyJsonProducer.class));
     }
 
     @BuildStep
@@ -184,11 +187,15 @@ class ForyProcessor {
         if (capabilities.isPresent(Capability.RESTEASY)) {
             resteasyJaxrsProviderBuildItemBuildProducer
                     .produce(new ResteasyJaxrsProviderBuildItem(ForySerializer.class.getName()));
+            resteasyJaxrsProviderBuildItemBuildProducer
+                    .produce(new ResteasyJaxrsProviderBuildItem(ForyJsonSerializer.class.getName()));
         } else if (capabilities.isPresent(Capability.RESTEASY_REACTIVE)) {
             registerHandler(RuntimeType.SERVER, additionalReaders, additionalWriters);
+            registerJsonHandler(RuntimeType.SERVER, additionalReaders, additionalWriters);
         }
         if (capabilities.isPresent(Capability.REST_CLIENT_REACTIVE)) {
             registerHandler(RuntimeType.CLIENT, additionalReaders, additionalWriters);
+            registerJsonHandler(RuntimeType.CLIENT, additionalReaders, additionalWriters);
         }
     }
 
@@ -203,6 +210,21 @@ class ForyProcessor {
         additionalWriters.produce(new MessageBodyWriterBuildItem.Builder(
                 ReactiveForySerializer.class.getName(), Object.class.getName())
                 .setMediaTypeStrings(List.of("application/fory", "application/*+fory"))
+                .setRuntimeType(type)
+                .setBuiltin(true).build());
+    }
+
+    private void registerJsonHandler(RuntimeType type,
+            BuildProducer<MessageBodyReaderBuildItem> additionalReaders,
+            BuildProducer<MessageBodyWriterBuildItem> additionalWriters) {
+        additionalReaders.produce(new MessageBodyReaderBuildItem.Builder(
+                ForyJsonSerializer.class.getName(), Object.class.getName())
+                .setMediaTypeStrings(List.of("application/json"))
+                .setRuntimeType(type)
+                .setBuiltin(true).build());
+        additionalWriters.produce(new MessageBodyWriterBuildItem.Builder(
+                ForyJsonSerializer.class.getName(), Object.class.getName())
+                .setMediaTypeStrings(List.of("application/json"))
                 .setRuntimeType(type)
                 .setBuiltin(true).build());
     }

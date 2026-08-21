@@ -119,6 +119,44 @@ public class ExampleResource {
 NOTE: If class registration is enabled, the class ID (or serialization identifier) must be identical on both the client and server sides. A mismatch in the class ID will result in serialization or deserialization issues, potentially causing runtime errors or data corruption.
 If class registration is disabled, please do not assign class id at client and server slides.
 
+== JSON Serialization
+
+The extension also supports `application/json` media type via Fory JSON — a high-performance JSON serializer built on the same Fory engine. Use standard `@Produces` and `@Consumes` annotations with `APPLICATION_JSON`:
+
+[source,java,subs=attributes+]
+----
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+
+import io.quarkiverse.fory.ForySerialization;
+
+@ForySerialization
+record Foo(int f1, String f2) {
+}
+
+@Path("/example")
+public class ExampleResource {
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Foo get() {
+        return new Foo(1, "test");
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Foo post(Foo obj) {
+        return new Foo(obj.f1() + 1, obj.f2());
+    }
+}
+----
+
+This replaces Jackson/JSON-B with Fory JSON for annotated types — no additional configuration is needed. Clients receive standard JSON output consumable by browsers, CLI tools, and any JSON-compliant client.
+
 [[extension-configuration-reference]]
 == Extension Configuration Reference
 
