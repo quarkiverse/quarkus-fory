@@ -1,5 +1,7 @@
 package io.quarkiverse.fory.it.json;
 
+import java.util.List;
+
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -17,6 +19,14 @@ public class JsonForyResources {
     @Produces(MediaType.APPLICATION_JSON)
     public Bar getBar() {
         return new Bar(42, "hello json");
+    }
+
+    @POST
+    @Path("/bars")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Bar> postBars(List<Bar> bars) {
+        return bars.stream().map(b -> new Bar(b.f1() + 1, "echo: " + b.f2())).toList();
     }
 
     @POST

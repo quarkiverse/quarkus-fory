@@ -7,7 +7,6 @@ metadata:
     - performance
     - encoding
     - codec
-    - json
   icon-url: https://raw.githubusercontent.com/apache/fory/main/docs/images/logo/fory-icon.png
   sponsor: "Apache Software Foundation"
   guide: https://docs.quarkiverse.io/quarkus-fory/dev/index.html

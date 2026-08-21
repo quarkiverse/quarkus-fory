@@ -31,4 +31,16 @@ public class JsonRestForyTest {
                 .contentType(ContentType.JSON)
                 .body("f1", is(2), "f2", is("echo: hello bar"));
     }
+
+    @Test
+    public void testPostBarsPreservesGenericElementType() {
+        given()
+                .contentType(ContentType.JSON)
+                .body("[{\"f1\":1,\"f2\":\"a\"},{\"f1\":2,\"f2\":\"b\"}]")
+                .when().post("/fory/json/bars")
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("f1", is(java.util.List.of(2, 3)), "f2", is(java.util.List.of("echo: a", "echo: b")));
+    }
 }

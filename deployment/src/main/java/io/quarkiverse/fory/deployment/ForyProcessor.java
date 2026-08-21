@@ -15,7 +15,6 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 import io.quarkiverse.fory.ForyBuildTimeConfig;
-import io.quarkiverse.fory.ForyJsonProducer;
 import io.quarkiverse.fory.ForyJsonSerializer;
 import io.quarkiverse.fory.ForyProducer;
 import io.quarkiverse.fory.ForyRecorder;
@@ -39,6 +38,7 @@ import io.quarkus.deployment.pkg.steps.NativeOrNativeSourcesBuild;
 import io.quarkus.resteasy.common.spi.ResteasyJaxrsProviderBuildItem;
 import io.quarkus.resteasy.reactive.spi.MessageBodyReaderBuildItem;
 import io.quarkus.resteasy.reactive.spi.MessageBodyWriterBuildItem;
+import io.quarkus.runtime.configuration.ConfigurationException;
 import io.quarkus.runtime.util.JavaVersionGreaterOrEqual25;
 
 class ForyProcessor {
@@ -65,11 +65,8 @@ class ForyProcessor {
     }
 
     @BuildStep
-    void unremovableBeans(ForyBuildTimeConfig config, BuildProducer<AdditionalBeanBuildItem> beanProducer) {
+    void unremovableBeans(BuildProducer<AdditionalBeanBuildItem> beanProducer) {
         beanProducer.produce(AdditionalBeanBuildItem.unremovableOf(ForyProducer.class));
-        if (config.json().enabled()) {
-            beanProducer.produce(AdditionalBeanBuildItem.unremovableOf(ForyJsonProducer.class));
-        }
     }
 
     @BuildStep
@@ -187,6 +184,11 @@ class ForyProcessor {
             BuildProducer<ResteasyJaxrsProviderBuildItem> resteasyJaxrsProviderBuildItemBuildProducer,
             BuildProducer<MessageBodyReaderBuildItem> additionalReaders,
             BuildProducer<MessageBodyWriterBuildItem> additionalWriters) {
+        if (config.json().enabled() && !QuarkusClassLoader.isClassPresentAtRuntime("org.apache.fory.json.ForyJson")) {
+            throw new ConfigurationException("quarkus.fory.json.enabled=true requires org.apache.fory:fory-json on "
+                    + "the classpath. Add it as a dependency, using the same version as fory-core, or set "
+                    + "quarkus.fory.json.enabled=false.");
+        }
         if (capabilities.isPresent(Capability.RESTEASY)) {
             resteasyJaxrsProviderBuildItemBuildProducer
                     .produce(new ResteasyJaxrsProviderBuildItem(ForySerializer.class.getName()));

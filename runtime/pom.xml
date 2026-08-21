@@ -24,9 +24,11 @@
             <groupId>org.apache.fory</groupId>
             <artifactId>fory-core</artifactId>
         </dependency>
+        <!-- Optional: only needed when quarkus.fory.json.enabled=true -->
         <dependency>
             <groupId>org.apache.fory</groupId>
             <artifactId>fory-json</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>jakarta.ws.rs</groupId>

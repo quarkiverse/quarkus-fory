@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
 
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.Produces;
@@ -16,9 +15,7 @@ import jakarta.ws.rs.ext.MessageBodyReader;
 import jakarta.ws.rs.ext.MessageBodyWriter;
 
 import org.apache.fory.json.ForyJson;
-
-import io.quarkus.arc.Arc;
-import io.quarkus.arc.ArcContainer;
+import org.apache.fory.reflect.TypeRef;
 
 /**
  * JAX-RS provider for {@code application/json} using Fory JSON.
@@ -35,9 +32,12 @@ import io.quarkus.arc.ArcContainer;
 @Produces(MediaType.APPLICATION_JSON)
 public class ForyJsonSerializer implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
 
-    private ForyJson foryJson;
-
-    public ForyJsonSerializer() {
+    /**
+     * Holder so that {@code fory-json} is only loaded when this provider is actually used, which
+     * lets the dependency stay optional for applications that don't enable JSON support.
+     */
+    private static final class Holder {
+        static final ForyJson INSTANCE = ForyJson.builder().build();
     }
 
     @Override
@@ -49,11 +49,14 @@ public class ForyJsonSerializer implements MessageBodyReader<Object>, MessageBod
     public Object readFrom(Class<Object> type, Type genericType, Annotation[] annotations,
             MediaType mediaType, MultivaluedMap<String, String> httpHeaders,
             InputStream entityStream) throws IOException, WebApplicationException {
+        // fory-json exposes no InputStream-based reader: JsonReader scans by index, so the whole
+        // document has to be resident. Request size is bounded by quarkus.http.limits.max-body-size.
         byte[] bytes = entityStream.readAllBytes();
         if (bytes.length == 0) {
             return null;
         }
-        return getForyJson().fromJson(bytes, type);
+        // Deserialize against the declared generic type, so List<Foo> and friends round-trip.
+        return getForyJson().fromJson(bytes, TypeRef.of(genericType != null ? genericType : type));
     }
 
     @Override
@@ -65,12 +68,9 @@ public class ForyJsonSerializer implements MessageBodyReader<Object>, MessageBod
     public void writeTo(Object obj, Class<?> type, Type genericType, Annotation[] annotations,
             MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
             OutputStream entityStream) throws IOException, WebApplicationException {
-        if (obj == null) {
-            entityStream.write("null".getBytes(StandardCharsets.UTF_8));
-            return;
-        }
-        byte[] bytes = getForyJson().toJsonBytes(obj);
-        entityStream.write(bytes);
+        // Writes through Fory's pooled buffer straight to the stream, instead of allocating a
+        // fresh byte[] per response. Serializes against the runtime class, as JSON writers do.
+        getForyJson().writeJsonTo(obj, entityStream);
     }
 
     private boolean isSupportedMediaType(MediaType mediaType) {
@@ -78,12 +78,6 @@ public class ForyJsonSerializer implements MessageBodyReader<Object>, MessageBod
     }
 
     private ForyJson getForyJson() {
-        if (foryJson == null) {
-            ArcContainer container = Arc.container();
-            if (container != null) {
-                foryJson = container.instance(ForyJson.class).get();
-            }
-        }
-        return foryJson;
+        return Holder.INSTANCE;
     }
 }

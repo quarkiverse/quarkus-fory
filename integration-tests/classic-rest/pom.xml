@@ -31,5 +31,9 @@
              <type>test-jar</type>
              <scope>test</scope>
          </dependency>
+         <dependency>
+             <groupId>org.apache.fory</groupId>
+             <artifactId>fory-json</artifactId>
+         </dependency>
     </dependencies>
 </project>

@@ -158,12 +158,28 @@ public class ExampleResource {
 Clients receive standard JSON output consumable by browsers, CLI tools, and any JSON-compliant client.
 
 Fory JSON support is disabled by default, because it takes over the `application/json` media type and would
-conflict with other JSON extensions such as Jackson or JSON-B. Enable it explicitly with:
+conflict with other JSON extensions such as Jackson or JSON-B. It also requires the `fory-json` artifact, which
+is an optional dependency of the extension so that applications not using JSON don't ship it.
+
+To enable it, add the dependency — using the same version as the `fory-core` brought in by the extension:
+
+[source,xml,subs=attributes+]
+----
+<dependency>
+    <groupId>org.apache.fory</groupId>
+    <artifactId>fory-json</artifactId>
+    <version>${fory.version}</version>
+</dependency>
+----
+
+and turn it on:
 
 [source,properties]
 ----
 quarkus.fory.json.enabled=true
 ----
+
+If the property is enabled without `fory-json` on the classpath, the build fails with an explicit message.
 
 [[extension-configuration-reference]]
 == Extension Configuration Reference
