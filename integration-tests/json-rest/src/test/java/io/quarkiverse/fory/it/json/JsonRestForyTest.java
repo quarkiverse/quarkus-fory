@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import org.junit.jupiter.api.Test;
 
+import io.quarkus.test.junit.DisabledOnIntegrationTest;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 
@@ -45,6 +46,8 @@ public class JsonRestForyTest {
     }
 
     @Test
+    @DisabledOnIntegrationTest("Fory JSON generates codecs at runtime for unregistered types, "
+            + "which native image forbids")
     public void testUnannotatedTypeRoundTrips() {
         given().when().get("/fory/json/plain")
                 .then().statusCode(200).contentType(ContentType.JSON)

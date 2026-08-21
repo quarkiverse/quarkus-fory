@@ -156,6 +156,11 @@ Unlike the binary format, Fory JSON needs no class registration: `@ForySerializa
 supported Java type can be serialized. Clients receive standard JSON output consumable by browsers, CLI tools,
 and any JSON-compliant client.
 
+NOTE: In native mode, types that are not registered through `@ForySerialization` fall back to runtime codec
+generation, which GraalVM forbids, and requests for them fail with
+`UnsupportedFeatureError: Classes cannot be defined at runtime`. Annotate the types you serialize as JSON when
+you target native image.
+
 Fory JSON support is disabled by default, because it takes over the `application/json` media type and would
 conflict with other JSON extensions such as Jackson or JSON-B. It also requires the `fory-json` artifact, which
 is an optional dependency of the extension so that applications not using JSON don't ship it.
