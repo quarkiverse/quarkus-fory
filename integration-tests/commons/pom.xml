@@ -17,6 +17,10 @@
              <version>${project.version}</version>
          </dependency>
          <dependency>
+             <groupId>org.apache.fory</groupId>
+             <artifactId>fory-json</artifactId>
+         </dependency>
+         <dependency>
              <groupId>jakarta.ws.rs</groupId>
              <artifactId>jakarta.ws.rs-api</artifactId>
          </dependency>
@@ -28,6 +32,19 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.apache.fory</groupId>
+                            <artifactId>fory-annotation-processor</artifactId>
+                            <version>${fory.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.jboss.jandex</groupId>
                 <artifactId>jandex-maven-plugin</artifactId>
@@ -75,6 +92,7 @@
             </activation>
             <properties>
                 <skipITs>true</skipITs>
+                <maven.compiler.proc>none</maven.compiler.proc>
                 <quarkus.native.enabled>false</quarkus.native.enabled>
             </properties>
         </profile>
