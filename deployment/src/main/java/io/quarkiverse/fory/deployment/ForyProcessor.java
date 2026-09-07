@@ -133,67 +133,6 @@ class ForyProcessor {
         }
     }
 
-    /**
-     * On JDK 25, {@code org.apache.fory.json.meta.JsonFieldAccessor} builds getter/setter
-     * accessors with {@code LambdaMetafactory} so it can generate them ahead of time for models
-     * known to fory-json's own Native Image Feature (types annotated with fory-json's
-     * {@code @JsonType}/{@code @JsonSubTypes}). Plain POJOs registered only through
-     * {@code @ForySerialization}, like this extension's integration test {@code Bar} record, are
-     * not known to that Feature, so the first access falls back to defining the lambda class at
-     * runtime, which GraalVM Native Image forbids. Force the plain-reflection accessors instead;
-     * they are already the fallback used on every other JDK.
-     */
-    @BuildStep(onlyIf = NativeOrNativeSourcesBuild.class)
-    void transformJsonFieldAccessorForNativeImage(ForyBuildTimeConfig config,
-            BuildProducer<BytecodeTransformerBuildItem> transformers) {
-        if (config.json().enabled()) {
-            transformers.produce(new BytecodeTransformerBuildItem(
-                    "org.apache.fory.json.meta.JsonFieldAccessor",
-                    (className, classVisitor) -> new JsonFieldAccessorClassVisitor(classVisitor)));
-        }
-    }
-
-    private static class JsonFieldAccessorClassVisitor extends ClassVisitor {
-        private static final String MEMBER_DESCRIPTOR = "(Ljava/lang/reflect/Member;)Lorg/apache/fory/json/meta/JsonFieldAccessor;";
-
-        JsonFieldAccessorClassVisitor(ClassVisitor delegate) {
-            super(Opcodes.ASM9, delegate);
-        }
-
-        @Override
-        public MethodVisitor visitMethod(int access, String name, String descriptor, String signature,
-                String[] exceptions) {
-            MethodVisitor mv = super.visitMethod(access, name, descriptor, signature, exceptions);
-            if (descriptor.equals(MEMBER_DESCRIPTOR)) {
-                if (name.equals("newGetterAccessor")) {
-                    emitReflectiveAccessor(mv, "org/apache/fory/json/meta/JsonFieldAccessor$GetterJsonAccessor");
-                    return null;
-                }
-                if (name.equals("newSetterAccessor")) {
-                    emitReflectiveAccessor(mv, "org/apache/fory/json/meta/JsonFieldAccessor$SetterJsonAccessor");
-                    return null;
-                }
-            }
-            return mv;
-        }
-
-        private static void emitReflectiveAccessor(MethodVisitor mv, String accessorInternalName) {
-            mv.visitCode();
-            mv.visitVarInsn(Opcodes.ALOAD, 0);
-            mv.visitTypeInsn(Opcodes.CHECKCAST, "java/lang/reflect/Method");
-            mv.visitVarInsn(Opcodes.ASTORE, 1);
-            mv.visitTypeInsn(Opcodes.NEW, accessorInternalName);
-            mv.visitInsn(Opcodes.DUP);
-            mv.visitVarInsn(Opcodes.ALOAD, 1);
-            mv.visitInsn(Opcodes.ACONST_NULL);
-            mv.visitMethodInsn(Opcodes.INVOKESPECIAL, accessorInternalName, "<init>",
-                    "(Ljava/lang/reflect/Method;Lorg/apache/fory/json/meta/JsonFieldAccessor$1;)V", false);
-            mv.visitInsn(Opcodes.ARETURN);
-            mv.visitMaxs(4, 2);
-            mv.visitEnd();
-        }
-    }
-
     private static class GuavaStubClassVisitor extends ClassVisitor {
         GuavaStubClassVisitor(ClassVisitor delegate) {
             super(Opcodes.ASM9, delegate);
