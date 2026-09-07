@@ -21,8 +21,11 @@ package io.quarkiverse.fory.it;
 
 import static io.quarkiverse.fory.it.ForyResources.BAR_CLASS_ID;
 
+import org.apache.fory.json.annotation.JsonType;
+
 import io.quarkiverse.fory.ForySerialization;
 
+@JsonType
 @ForySerialization(serializer = BarSerializer.class, classId = BAR_CLASS_ID)
 public record Bar(int f1, String f2) {
 }
