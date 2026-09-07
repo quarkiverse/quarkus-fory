@@ -132,6 +132,9 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
+import org.apache.fory.json.annotation.JsonType;
+
+@JsonType
 record Foo(int f1, String f2) {
 }
 
@@ -156,10 +159,9 @@ Unlike the binary format, Fory JSON needs no class registration: `@ForySerializa
 supported Java type can be serialized. Clients receive standard JSON output consumable by browsers, CLI tools,
 and any JSON-compliant client.
 
-NOTE: In native mode, types that are not registered through `@ForySerialization` fall back to runtime codec
-generation, which GraalVM forbids, and requests for them fail with
-`UnsupportedFeatureError: Classes cannot be defined at runtime`. Annotate the types you serialize as JSON when
-you target native image.
+NOTE: In native mode, annotate every JSON model with `@JsonType`. Otherwise, Fory may create field-accessor
+lambdas at runtime, which GraalVM Native Image forbids, and requests can fail with
+`UnsupportedFeatureError: Classes cannot be defined at runtime`.
 
 Fory JSON support is disabled by default, because it takes over the `application/json` media type and would
 conflict with other JSON extensions such as Jackson or JSON-B. It also requires the `fory-json` artifact, which
@@ -184,6 +186,44 @@ quarkus.fory.json.enabled=true
 ----
 
 If the property is enabled without `fory-json` on the classpath, the build fails with an explicit message.
+
+For JVM builds, add the Fory annotation processor to the module that compiles each `@JsonType` model:
+
+[source,xml,subs=attributes+]
+----
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <configuration>
+        <annotationProcessorPaths>
+            <path>
+                <groupId>org.apache.fory</groupId>
+                <artifactId>fory-annotation-processor</artifactId>
+                <version>${fory.version}</version>
+            </path>
+        </annotationProcessorPaths>
+    </configuration>
+</plugin>
+----
+
+WARNING: With Fory 1.7.0 and later, disable annotation processing in the Maven profile used for native builds.
+Native Image discovers `@JsonType` directly, while including the processor-generated JSON registry can cause
+native analysis to fail. Keep the annotation processor enabled for JVM builds.
+
+[source,xml]
+----
+<profile>
+    <id>native</id>
+    <activation>
+        <property>
+            <name>native</name>
+        </property>
+    </activation>
+    <properties>
+        <maven.compiler.proc>none</maven.compiler.proc>
+    </properties>
+</profile>
+----
 
 [[extension-configuration-reference]]
 == Extension Configuration Reference
