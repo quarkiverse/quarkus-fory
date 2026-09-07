@@ -132,9 +132,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-import org.apache.fory.json.annotation.JsonType;
-
-@JsonType
 record Foo(int f1, String f2) {
 }
 
@@ -159,9 +156,10 @@ Unlike the binary format, Fory JSON needs no class registration: `@ForySerializa
 supported Java type can be serialized. Clients receive standard JSON output consumable by browsers, CLI tools,
 and any JSON-compliant client.
 
-NOTE: In native mode, annotate every JSON model with `@JsonType`. Otherwise, Fory may create field-accessor
-lambdas at runtime, which GraalVM Native Image forbids, and requests can fail with
-`UnsupportedFeatureError: Classes cannot be defined at runtime`.
+NOTE: In native mode, types that are not registered through `@ForySerialization` or `@JsonType` fall back to
+runtime codec generation, which GraalVM forbids, and requests for them fail with
+`UnsupportedFeatureError: Classes cannot be defined at runtime`. Annotate the types you serialize as JSON when
+you target native image.
 
 Fory JSON support is disabled by default, because it takes over the `application/json` media type and would
 conflict with other JSON extensions such as Jackson or JSON-B. It also requires the `fory-json` artifact, which
@@ -187,7 +185,27 @@ quarkus.fory.json.enabled=true
 
 If the property is enabled without `fory-json` on the classpath, the build fails with an explicit message.
 
-For JVM builds, add the Fory annotation processor to the module that compiles each `@JsonType` model:
+=== Native Image with Fory 1.7.0 and later
+
+`@JsonType` is optional. Without it, Fory falls back to the interpreted `ObjectCodecBuilder` at runtime, which
+works on both the JVM and GraalVM Native Image with Fory 1.7.0 and later.
+
+Annotating a model with `@JsonType` is useful when you want Fory to generate a dedicated codec ahead of
+time. For native builds, `ForyJsonGraalVMFeature` is registered through `fory-json`'s
+`native-image.properties` and discovers `@JsonType` classes directly during image generation — no extra
+wiring is required on the Quarkus side. Choose this path to avoid the interpreted codec's startup cost:
+
+[source,java]
+----
+import org.apache.fory.json.annotation.JsonType;
+
+@JsonType
+record Foo(int f1, String f2) {
+}
+----
+
+Once a Java model uses `@JsonType`, normal JVM builds require the Fory annotation processor to generate its
+JSON codec at compile time. Add the processor to the module that compiles the model:
 
 [source,xml,subs=attributes+]
 ----
@@ -206,9 +224,10 @@ For JVM builds, add the Fory annotation processor to the module that compiles ea
 </plugin>
 ----
 
-WARNING: With Fory 1.7.0 and later, disable annotation processing in the Maven profile used for native builds.
-Native Image discovers `@JsonType` directly, while including the processor-generated JSON registry can cause
-native analysis to fail. Keep the annotation processor enabled for JVM builds.
+For native builds, disable annotation processing in the native Maven profile. `ForyJsonGraalVMFeature`
+discovers `@JsonType` classes directly during image generation, so the processor-generated JSON registry is
+not needed — and including it can cause native analysis to fail. Keep the annotation processor enabled for
+JVM builds.
 
 [source,xml]
 ----
