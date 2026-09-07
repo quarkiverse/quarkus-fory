@@ -132,9 +132,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-import org.apache.fory.json.annotation.JsonType;
-
-@JsonType
 record Foo(int f1, String f2) {
 }
 
@@ -158,10 +155,6 @@ public class ExampleResource {
 Unlike the binary format, Fory JSON needs no class registration: `@ForySerialization` is not required, and any
 supported Java type can be serialized. Clients receive standard JSON output consumable by browsers, CLI tools,
 and any JSON-compliant client.
-
-NOTE: In native mode, annotate every JSON model with `@JsonType`. Otherwise, Fory may create field-accessor
-lambdas at runtime, which GraalVM Native Image forbids, and requests can fail with
-`UnsupportedFeatureError: Classes cannot be defined at runtime`.
 
 Fory JSON support is disabled by default, because it takes over the `application/json` media type and would
 conflict with other JSON extensions such as Jackson or JSON-B. It also requires the `fory-json` artifact, which
@@ -187,7 +180,27 @@ quarkus.fory.json.enabled=true
 
 If the property is enabled without `fory-json` on the classpath, the build fails with an explicit message.
 
-For JVM builds, add the Fory annotation processor to the module that compiles each `@JsonType` model:
+=== Native Image with Fory 1.7.0 and later
+
+Runtime codec generation works on the JVM, so ordinary JVM applications do not need `@JsonType` or an
+annotation processor. For a native image, annotate every JSON model with `@JsonType` so Fory can prepare its
+field accessors during image generation:
+
+[source,java]
+----
+import org.apache.fory.json.annotation.JsonType;
+
+@JsonType
+record Foo(int f1, String f2) {
+}
+----
+
+Without `@JsonType`, requests can fail with
+`UnsupportedFeatureError: Classes cannot be defined at runtime` because GraalVM Native Image forbids the
+runtime-generated field-accessor lambdas.
+
+Once a Java model uses `@JsonType`, normal JVM builds require the Fory annotation processor to generate its
+JSON codec. Add the processor to the module that compiles the model:
 
 [source,xml,subs=attributes+]
 ----
@@ -206,9 +219,9 @@ For JVM builds, add the Fory annotation processor to the module that compiles ea
 </plugin>
 ----
 
-WARNING: With Fory 1.7.0 and later, disable annotation processing in the Maven profile used for native builds.
-Native Image discovers `@JsonType` directly, while including the processor-generated JSON registry can cause
-native analysis to fail. Keep the annotation processor enabled for JVM builds.
+For native builds, disable annotation processing in the native Maven profile. Native Image discovers
+`@JsonType` directly, while including the processor-generated JSON registry can cause native analysis to fail.
+Keep the annotation processor enabled for JVM builds.
 
 [source,xml]
 ----
