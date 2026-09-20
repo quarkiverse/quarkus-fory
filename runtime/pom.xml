@@ -49,6 +49,12 @@
                         </goals>
                         <configuration>
                             <deployment>${project.groupId}:${project.artifactId}-deployment:${project.version}</deployment>
+                            <capabilities>
+                                <providesIf>
+                                    <positive>io.quarkiverse.fory.deployment.JsonEnabled</positive>
+                                    <name>io.quarkus.resteasy.reactive.json.jackson</name>
+                                </providesIf>
+                            </capabilities>
                         </configuration>
                     </execution>
                 </executions>
