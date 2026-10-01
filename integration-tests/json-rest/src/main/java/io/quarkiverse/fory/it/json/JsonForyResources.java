@@ -47,6 +47,21 @@ public class JsonForyResources {
     }
 
     @GET
+    @Path("/json-type")
+    @Produces(MediaType.APPLICATION_JSON)
+    public JsonTypeModel getJsonType() {
+        return new JsonTypeModel(7, "generated codec");
+    }
+
+    @POST
+    @Path("/json-type")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public JsonTypeModel postJsonType(JsonTypeModel model) {
+        return new JsonTypeModel(model.n() + 1, "echo: " + model.s());
+    }
+
+    @GET
     @Path("/bar")
     @Produces(MediaType.APPLICATION_JSON)
     public Bar getBar() {

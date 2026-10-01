@@ -36,4 +36,43 @@
              <artifactId>fory-json</artifactId>
          </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>fory-json-codegen</id>
+            <activation>
+                <property>
+                    <name>!native</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <annotationProcessorPaths>
+                                <path>
+                                    <groupId>org.apache.fory</groupId>
+                                    <artifactId>fory-annotation-processor</artifactId>
+                                    <version>${fory.version}</version>
+                                </path>
+                            </annotationProcessorPaths>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>native-test</id>
+            <activation>
+                <property>
+                    <name>native</name>
+                </property>
+            </activation>
+            <properties>
+                <native.surefire.skip>true</native.surefire.skip>
+            </properties>
+        </profile>
+    </profiles>
 </project>
