@@ -60,6 +60,18 @@ public class JsonRestForyTest {
     }
 
     @Test
+    public void testJsonTypeRoundTrips() {
+        given().when().get("/fory/json/json-type")
+                .then().statusCode(200).contentType(ContentType.JSON)
+                .body("n", is(7), "s", is("generated codec"));
+
+        given().contentType(ContentType.JSON).body("{\"n\":1,\"s\":\"x\"}")
+                .when().post("/fory/json/json-type")
+                .then().statusCode(200).contentType(ContentType.JSON)
+                .body("n", is(2), "s", is("echo: x"));
+    }
+
+    @Test
     public void testRestClientRoundTrip() {
         given().when().get("/fory/json/client")
                 .then().statusCode(200).contentType(ContentType.JSON)
